@@ -22,4 +22,4 @@ pub use preprocessing::JoltVerifierPreprocessing;
 pub use proof::{ClearProofClaims, JoltProof, JoltProofClaims};
 #[cfg(feature = "field-inline")]
 pub use proof::{FieldInlineCommitments, FieldRegistersCommitments};
-pub use verifier::{verify, CheckedInputs};
+pub use verifier::{verify, verify_with_probe, CheckedInputs};

@@ -66,6 +66,60 @@ CKB's `MAX_BLOCK_CYCLES` is 3.5 G and a typical two-in-two-out transfer is
 block, so heavy cycle optimization (Straus-Shamir multi-exp, GT exponentiation
 windows, pairing tuning) is the next phase's core work.
 
+### Cycle decomposition
+
+`jolt-verify-bench` emits per-phase cycle marks (`verify_with_probe` +
+`current_cycles` syscall); `ckb/jolt-cycle-runner` executes it and prints them:
+
+| phase | cycles | share |
+|---|---|---|
+| decode_proof | 0.954 G | 25.4% |
+| stage1–7 (sumchecks) | 0.147 G | 3.9% |
+| stage8 (batch opening + Dory verify) | 2.621 G | 69.9% |
+| everything else | 0.030 G | 0.8% |
+
+Primitive costs measured in-VM (`jolt-prim-bench`):
+
+| op | cycles |
+|---|---|
+| Fr mul | 542 |
+| GT (Fq12) mul | 66 K |
+| GT exp (254-bit) | 19.9 M |
+| G1 scalar mul | 1.5 M |
+| G2 scalar mul | 8.6 M |
+| single pairing | 21.8 M |
+| 4-way multi-pairing | 42.2 M |
+| GT deserialize + r-torsion check | 19.7 M |
+| transcript absorb+challenge | 11.8 K |
+
+The model closes: stage8's 2.62 G ≈ **132 GT-exp equivalents** (the
+`PCS::combine` RLC over ~30 commitments plus ~12 GT `scale` ops per Dory
+reduce round), and decode's 0.954 G ≈ **48 GT subgroup checks** (every
+deserialized GT element pays a full `x^r == 1` exponentiation:
+`Bn254GT::deserialize` and dory's `ArkGT` validation). Everything else —
+all seven sumcheck stages combined — is 4% noise. The verifier's cycle cost
+is, almost entirely, 254-bit Fq12 exponentiations (~180 of them).
+
+Optimization levers, in expected-impact order:
+1. **Lazy/batched GT multi-exp in Dory verify** — the verifier's fold state
+   (C/D1/D2/E2) is linear in the round messages, so the per-round `scale`
+   chains can accumulate exponents symbolically and finish with one
+   shared-squaring Straus multi-exp (~250 squarings amortized over ~100
+   bases instead of 254 per exp). Squarings dominate naive exps, so this is
+   roughly a 4–5x cut on the Dory portion.
+2. **Cyclotomic exponentiation** — GT elements live in the cyclotomic
+   subgroup; the arkworks fork already implements `CyclotomicMultSubgroup`
+   for Fp12 (cyclotomic squaring ≈ 3x cheaper). Drop-in for
+   `Bn254GT::scalar_mul`, the subgroup checks, and dory's `scale`.
+3. **Cheaper subgroup checks** — replace the per-element `x^r == 1` with a
+   Frobenius-based GT membership test, or batch all ~48 elements into one
+   randomized check after the transcript absorbs the commitments.
+4. **`PCS::combine` as one windowed multi-exp** instead of ~30 independent
+   exponentiations.
+
+Back-of-envelope: levers 1–3 together put stage8 at ~0.6–0.8 G and decode at
+~0.1–0.2 G, i.e. ~1 G total before touching pairings or sumchecks.
+
 Memory: the VM gives a script 4 MB total. The ELF is ~1.5 MB text
 (opt-level=s; opt-level=3 is ~2.1 MB and forces the heap below the
 verifier's working set) + 2.3 MB buddy heap + ~190 KB stack headroom.

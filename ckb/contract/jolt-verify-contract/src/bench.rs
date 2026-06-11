@@ -4,6 +4,11 @@
 //! Run `cargo run --profile build-fast -p jolt-proof-export -- --guest
 //! fibonacci --out target/jolt-artifacts` at the repo root first; the
 //! `include_bytes!` paths below point into that output directory.
+//!
+//! Emits one debug-syscall line per verification phase:
+//! `phase <name> <cycles-since-previous-probe>`. Cycle counts come from the
+//! `current_cycles` syscall (500 cycles each — negligible against G-scale
+//! phases). The runner must implement syscalls 2042 and 2177.
 
 #![no_std]
 #![no_main]
@@ -11,7 +16,8 @@
 mod sync_shims;
 mod verify;
 
-use ckb_std::{debug, default_alloc, entry};
+use ckb_std::syscalls::{current_cycles, debug};
+use ckb_std::{default_alloc, entry};
 
 entry!(main);
 default_alloc!({ 4 * 1024 }, { 2304 * 1024 }, 64);
@@ -30,7 +36,14 @@ const PROOF: &[u8] = include_bytes!(concat!(
 ));
 
 fn main() -> i8 {
-    let code = verify::verify_artifacts(PREPROCESSING, PUBLIC_IO, PROOF);
-    debug!("jolt-verify-bench exit code: {}", code);
+    let mut last = current_cycles();
+    let mut probe = |phase: &'static str| {
+        let now = current_cycles();
+        debug(alloc::format!("phase {} {}", phase, now - last));
+        last = current_cycles();
+    };
+
+    let code = verify::verify_artifacts_with_probe(PREPROCESSING, PUBLIC_IO, PROOF, &mut probe);
+    debug(alloc::format!("verify exit code: {}", code));
     code
 }

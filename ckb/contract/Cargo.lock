@@ -709,6 +709,7 @@ dependencies = [
  "jolt-field",
  "jolt-transcript",
  "jolt-verifier",
+ "postcard",
 ]
 
 [[package]]

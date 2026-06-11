@@ -1,0 +1,17 @@
+# Standalone host tool (own workspace): keeps it outside the contract
+# workspace whose default build target is riscv64.
+[workspace]
+
+[package]
+name = "jolt-cycle-runner"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Host tool: run a CKB script ELF in ckb-vm and report per-phase cycle counts"
+publish = false
+
+[dependencies]
+ckb-vm = { path = "../../../ckb-vm" }
+
+[profile.release]
+debug = false

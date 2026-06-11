@@ -38,6 +38,38 @@ where
     T: Transcript<Challenge = F>,
     <F as WithAccumulator>::Accumulator: RingAccumulator<Element = F>,
 {
+    verify_with_probe::<F, PCS, VC, T>(
+        preprocessing,
+        public_io,
+        proof,
+        trusted_advice_commitment,
+        zk,
+        &mut |_| {},
+    )
+}
+
+/// [`verify`] with a phase probe: `probe` is invoked with a phase name after
+/// each verification phase completes, letting callers attribute cost (e.g.
+/// cycle counts inside a VM) to individual phases.
+pub fn verify_with_probe<F, PCS, VC, T>(
+    preprocessing: &JoltVerifierPreprocessing<PCS, VC>,
+    public_io: &JoltDevice,
+    proof: &JoltProof<PCS, VC>,
+    trusted_advice_commitment: Option<&PCS::Output>,
+    zk: bool,
+    probe: &mut dyn FnMut(&'static str),
+) -> Result<(), VerifierError>
+where
+    F: Field + AppendToTranscript,
+    PCS: CommitmentScheme<Field = F>
+        + AdditivelyHomomorphic
+        + ZkOpeningScheme<HidingCommitment = VC::Output>,
+    PCS::Output: AppendToTranscript + HomomorphicCommitment<F>,
+    VC: VectorCommitment<Field = F>,
+    VC::Output: Copy + HomomorphicCommitment<F> + AppendToTranscript,
+    T: Transcript<Challenge = F>,
+    <F as WithAccumulator>::Accumulator: RingAccumulator<Element = F>,
+{
     let checked = validate_inputs(
         preprocessing,
         public_io,
@@ -47,12 +79,15 @@ where
     )?;
     validate_proof_consistency(proof, checked.zk)?;
     validate_proof_config(&JoltProtocolConfig::for_zk(checked.zk), proof)?;
+    probe("validate");
 
     let mut transcript = T::new(b"Jolt");
     absorb_preamble(&checked, proof, &mut transcript);
     absorb_commitments(proof, trusted_advice_commitment, &mut transcript);
+    probe("absorb");
 
     let stage1 = stage1::verify(&checked, preprocessing, proof, &mut transcript)?;
+    probe("stage1");
     let stage2 = stage2::verify(
         &checked,
         preprocessing,
@@ -60,6 +95,7 @@ where
         &mut transcript,
         stage2::deps(&stage1),
     )?;
+    probe("stage2");
     let stage3 = stage3::verify(
         &checked,
         preprocessing,
@@ -67,6 +103,7 @@ where
         &mut transcript,
         stage3::deps(&stage1, &stage2)?,
     )?;
+    probe("stage3");
     let stage4 = stage4::verify(
         &checked,
         preprocessing,
@@ -74,6 +111,7 @@ where
         &mut transcript,
         stage4::deps(&stage2, &stage3)?,
     )?;
+    probe("stage4");
     let stage5 = stage5::verify(
         &checked,
         preprocessing,
@@ -81,6 +119,7 @@ where
         &mut transcript,
         stage5::deps(&stage2, &stage4)?,
     )?;
+    probe("stage5");
     let stage6 = stage6::verify(
         &checked,
         preprocessing,
@@ -88,6 +127,7 @@ where
         &mut transcript,
         stage6::deps(&stage1, &stage2, &stage3, &stage4, &stage5)?,
     )?;
+    probe("stage6");
     let stage7 = stage7::verify(
         &checked,
         preprocessing,
@@ -95,6 +135,7 @@ where
         &mut transcript,
         stage7::deps(&stage4, &stage6)?,
     )?;
+    probe("stage7");
     let stage8 = stage8::verify(
         &checked,
         preprocessing,
@@ -103,6 +144,7 @@ where
         &mut transcript,
         stage8::deps(&stage6, &stage7)?,
     )?;
+    probe("stage8");
 
     if checked.zk {
         let zk_stages = zk_stage_outputs::<PCS, VC>(
