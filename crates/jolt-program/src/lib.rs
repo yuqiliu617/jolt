@@ -3,6 +3,11 @@
 //! This crate's program-construction pipeline is RV64-only. ELF32/RV32 inputs
 //! are rejected at the image boundary.
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 pub mod error;
 pub mod execution;
 pub mod expand;

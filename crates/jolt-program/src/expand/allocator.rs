@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use common::constants::{RISCV_REGISTER_COUNT, VIRTUAL_REGISTER_COUNT};
 
 use crate::expand::ExpansionError;

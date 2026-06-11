@@ -4,7 +4,8 @@
 //! protocols. All functions are generic over [`Field`] and operate on
 //! integer-indexed domains (symmetric or arbitrary).
 
-use std::fmt;
+use alloc::vec::Vec;
+use core::fmt;
 
 use jolt_field::Field;
 
@@ -147,7 +148,7 @@ impl fmt::Display for CenteredIntegerDomainError {
     }
 }
 
-impl std::error::Error for CenteredIntegerDomainError {}
+impl core::error::Error for CenteredIntegerDomainError {}
 
 /// Start of the centered consecutive-integer domain used by core univariate skip.
 ///

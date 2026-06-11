@@ -24,6 +24,7 @@
 //! (shrinking `lt_hi` and `eq_hi`), then all lo vars (shrinking `lt_lo`).
 //! Total memory stays at 3 · √N throughout.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 use crate::EqPolynomial;

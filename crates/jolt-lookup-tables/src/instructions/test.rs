@@ -1,6 +1,6 @@
 //! Per-instruction test helpers.
 
-use std::any::TypeId;
+use core::any::TypeId;
 
 use jolt_riscv::{Flags, InstructionFlags, JoltCycle, JoltInstructionRowData};
 use rand::prelude::*;

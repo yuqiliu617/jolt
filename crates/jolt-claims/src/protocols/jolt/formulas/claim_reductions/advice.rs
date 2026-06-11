@@ -1,4 +1,5 @@
-use std::{cmp::min, ops::Range};
+use alloc::vec::Vec;
+use core::{cmp::min, ops::Range};
 
 use jolt_field::{Field, RingCore};
 use jolt_poly::EqPolynomial;

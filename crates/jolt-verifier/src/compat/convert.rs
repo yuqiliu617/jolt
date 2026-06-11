@@ -462,7 +462,7 @@ where
 fn core_dory_commitment_into_verifier(commitment: &CoreDoryCommitment) -> Bn254GT {
     // SAFETY: `jolt-core` Dory and modular `jolt-dory` use thin wrappers
     // over the same arkworks `Fq12` target-group element.
-    unsafe { std::mem::transmute_copy(commitment) }
+    unsafe { core::mem::transmute_copy(commitment) }
 }
 
 #[cfg(feature = "zk")]
@@ -595,7 +595,7 @@ where
                         CoreFieldBridge::into_verifier_field(claim),
                     )
                 })
-                .collect::<std::collections::BTreeMap<_, _>>(),
+                .collect::<alloc::collections::BTreeMap<_, _>>(),
         ),
         trace_length,
     )

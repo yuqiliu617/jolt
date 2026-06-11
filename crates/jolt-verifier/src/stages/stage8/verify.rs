@@ -12,6 +12,8 @@ use crate::{
     verifier::CheckedInputs,
     VerifierError,
 };
+use alloc::string::ToString;
+use alloc::vec::Vec;
 #[cfg(feature = "field-inline")]
 use jolt_claims::protocols::field_inline::formulas::claim_reductions::increments as field_increments;
 use jolt_claims::protocols::jolt::{

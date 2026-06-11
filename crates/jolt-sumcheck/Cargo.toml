@@ -6,13 +6,25 @@ license = "MIT"
 description = "Sumcheck protocol types and verification for the Jolt zkVM"
 
 [features]
+default = ["std"]
+std = [
+  "jolt-crypto/std",
+  "jolt-field/std",
+  "jolt-openings/std",
+  "jolt-poly/std",
+  "jolt-r1cs?/std",
+  "jolt-transcript/std",
+  "serde/std",
+  "tracing/std",
+  "thiserror/std",
+]
 r1cs = ["dep:jolt-r1cs"]
 
 [lints]
 workspace = true
 
 [dependencies]
-jolt-crypto.workspace = true
+jolt-crypto = { workspace = true, features = ["bn254"] }
 jolt-field.workspace = true
 jolt-openings.workspace = true
 jolt-poly.workspace = true

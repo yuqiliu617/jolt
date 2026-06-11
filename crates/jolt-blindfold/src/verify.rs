@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_crypto::{HomomorphicCommitment, VectorCommitment, VectorCommitmentOpening};
 use jolt_field::{Field, FieldCore, RingAccumulator, WithAccumulator};
 use jolt_poly::EqPolynomial;

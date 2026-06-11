@@ -1,5 +1,6 @@
 //! Typed inputs for stage 6b.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};
 

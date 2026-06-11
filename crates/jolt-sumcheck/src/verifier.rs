@@ -1,5 +1,6 @@
 //! Sumcheck verifier: checks round polynomials against the claimed sum.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use jolt_poly::UnivariatePolynomial;
 use jolt_transcript::{AppendToTranscript, LabelWithCount, Transcript};

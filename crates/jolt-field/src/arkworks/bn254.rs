@@ -91,49 +91,49 @@ impl From<u128> for Fr {
     }
 }
 
-impl std::fmt::Debug for Fr {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        std::fmt::Debug::fmt(&self.0, f)
+impl core::fmt::Debug for Fr {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        core::fmt::Debug::fmt(&self.0, f)
     }
 }
 
-impl std::fmt::Display for Fr {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        std::fmt::Display::fmt(&self.0, f)
+impl core::fmt::Display for Fr {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        core::fmt::Display::fmt(&self.0, f)
     }
 }
 
 macro_rules! delegate_binop {
     ($Trait:ident, $method:ident) => {
-        impl std::ops::$Trait for Fr {
+        impl core::ops::$Trait for Fr {
             type Output = Fr;
             #[inline(always)]
             fn $method(self, rhs: Fr) -> Fr {
-                Fr(std::ops::$Trait::$method(self.0, rhs.0))
+                Fr(core::ops::$Trait::$method(self.0, rhs.0))
             }
         }
 
-        impl std::ops::$Trait<&Fr> for Fr {
+        impl core::ops::$Trait<&Fr> for Fr {
             type Output = Fr;
             #[inline(always)]
             fn $method(self, rhs: &Fr) -> Fr {
-                Fr(std::ops::$Trait::$method(self.0, &rhs.0))
+                Fr(core::ops::$Trait::$method(self.0, &rhs.0))
             }
         }
 
-        impl std::ops::$Trait<Fr> for &Fr {
+        impl core::ops::$Trait<Fr> for &Fr {
             type Output = Fr;
             #[inline(always)]
             fn $method(self, rhs: Fr) -> Fr {
-                Fr(std::ops::$Trait::$method(self.0, rhs.0))
+                Fr(core::ops::$Trait::$method(self.0, rhs.0))
             }
         }
 
-        impl<'a, 'b> std::ops::$Trait<&'b Fr> for &'a Fr {
+        impl<'a, 'b> core::ops::$Trait<&'b Fr> for &'a Fr {
             type Output = Fr;
             #[inline(always)]
             fn $method(self, rhs: &'b Fr) -> Fr {
-                Fr(std::ops::$Trait::$method(self.0, &rhs.0))
+                Fr(core::ops::$Trait::$method(self.0, &rhs.0))
             }
         }
     };
@@ -144,7 +144,7 @@ delegate_binop!(Sub, sub);
 delegate_binop!(Mul, mul);
 delegate_binop!(Div, div);
 
-impl std::ops::Neg for Fr {
+impl core::ops::Neg for Fr {
     type Output = Fr;
     #[inline(always)]
     fn neg(self) -> Fr {
@@ -152,46 +152,46 @@ impl std::ops::Neg for Fr {
     }
 }
 
-impl std::ops::AddAssign for Fr {
+impl core::ops::AddAssign for Fr {
     #[inline(always)]
     fn add_assign(&mut self, rhs: Fr) {
         self.0.add_assign(rhs.0);
     }
 }
 
-impl std::ops::SubAssign for Fr {
+impl core::ops::SubAssign for Fr {
     #[inline(always)]
     fn sub_assign(&mut self, rhs: Fr) {
         self.0.sub_assign(rhs.0);
     }
 }
 
-impl std::ops::MulAssign for Fr {
+impl core::ops::MulAssign for Fr {
     #[inline(always)]
     fn mul_assign(&mut self, rhs: Fr) {
         self.0.mul_assign(rhs.0);
     }
 }
 
-impl std::iter::Sum for Fr {
+impl core::iter::Sum for Fr {
     fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
         Fr(iter.map(|f| f.0).sum())
     }
 }
 
-impl<'a> std::iter::Sum<&'a Fr> for Fr {
+impl<'a> core::iter::Sum<&'a Fr> for Fr {
     fn sum<I: Iterator<Item = &'a Fr>>(iter: I) -> Self {
         Fr(iter.map(|f| f.0).sum())
     }
 }
 
-impl std::iter::Product for Fr {
+impl core::iter::Product for Fr {
     fn product<I: Iterator<Item = Self>>(iter: I) -> Self {
         Fr(iter.map(|f| f.0).product())
     }
 }
 
-impl<'a> std::iter::Product<&'a Fr> for Fr {
+impl<'a> core::iter::Product<&'a Fr> for Fr {
     fn product<I: Iterator<Item = &'a Fr>>(iter: I) -> Self {
         Fr(iter.map(|f| f.0).product())
     }

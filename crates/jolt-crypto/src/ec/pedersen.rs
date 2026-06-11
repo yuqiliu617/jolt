@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_field::Fr;
 use serde::{Deserialize, Serialize};
 
@@ -16,7 +17,7 @@ const EMPTY_GENERATORS_MSG: &str = "Pedersen setup requires at least one message
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(bound = "")]
 pub struct Pedersen<G: JoltGroup> {
-    _marker: std::marker::PhantomData<G>,
+    _marker: core::marker::PhantomData<G>,
 }
 
 /// Setup parameters for Pedersen commitments: a vector of message generators

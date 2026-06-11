@@ -1,4 +1,5 @@
-use std::ops::Range;
+use alloc::vec::Vec;
+use core::ops::Range;
 
 use jolt_crypto::HomomorphicCommitment;
 use jolt_field::Field;

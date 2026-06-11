@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_claims::{Expr, Source};
 use jolt_field::Field;
 use thiserror::Error;

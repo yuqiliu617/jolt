@@ -21,6 +21,7 @@ num-traits = { workspace = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
+jolt-field = { workspace = true, features = ["std", "bn254"] }
 rand = { workspace = true }
 rand_chacha = { workspace = true }
 bincode = { workspace = true }
@@ -34,5 +35,13 @@ harness = false
 ignored = ["rand"]
 
 [features]
-default = ["parallel"]
-parallel = ["rayon"]
+default = ["std", "parallel"]
+std = [
+  "jolt-field/std",
+  "serde/std",
+  "thiserror/std",
+  "tracing/std",
+  "rand_core/std",
+  "num-traits/std",
+]
+parallel = ["std", "rayon"]

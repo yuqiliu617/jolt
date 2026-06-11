@@ -1,5 +1,5 @@
-use std::fmt::Debug;
-use std::ops::{Add, AddAssign, Neg, Sub, SubAssign};
+use core::fmt::Debug;
+use core::ops::{Add, AddAssign, Neg, Sub, SubAssign};
 
 use jolt_field::Field;
 use jolt_transcript::AppendToTranscript;

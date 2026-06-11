@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_field::{Field, RingCore};
 
 use crate::{challenge, opening, public};

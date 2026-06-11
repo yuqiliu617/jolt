@@ -1,5 +1,6 @@
 //! Compile-time Jolt R1CS composition.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use jolt_poly::{
     lagrange::{centered_lagrange_evals, centered_lagrange_kernel, CenteredIntegerDomainError},

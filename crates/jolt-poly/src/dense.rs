@@ -1,6 +1,8 @@
 //! Polynomial stored as evaluations over the Boolean hypercube.
 
-use std::ops::{Add, AddAssign, Mul, Neg, Sub, SubAssign};
+use alloc::string::String;
+use alloc::vec::Vec;
+use core::ops::{Add, AddAssign, Mul, Neg, Sub, SubAssign};
 
 use jolt_field::Field;
 use rand_core::RngCore;

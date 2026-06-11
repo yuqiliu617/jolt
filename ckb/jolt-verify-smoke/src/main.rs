@@ -40,7 +40,7 @@ fn run() -> Result<()> {
     let public_io: JoltDevice = read_artifact(&dir, jolt_artifacts::PUBLIC_IO_FILE)?;
     let proof: Proof = read_artifact(&dir, jolt_artifacts::PROOF_FILE)?;
 
-    verify::<Fr, DoryScheme, Pedersen<Bn254G1>, Blake2bTranscript>(
+    verify::<Fr, DoryScheme, Pedersen<Bn254G1>, Blake2bTranscript<Fr>>(
         &preprocessing,
         &public_io,
         &proof,

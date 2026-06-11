@@ -5,10 +5,10 @@
 
 use ark_bn254::{Fq, Fr, G1Projective};
 use ark_ff::{BigInteger, MontFp, PrimeField};
+use core::ops::AddAssign;
 use num_bigint::{BigInt, BigUint, Sign};
 use num_integer::Integer;
 use num_traits::{One, Signed};
-use std::ops::AddAssign;
 
 /// GLV endomorphism coefficient for BN254 G1: `β` such that `[λ]P = (β·x, y)`
 const ENDO_COEFF: Fq =

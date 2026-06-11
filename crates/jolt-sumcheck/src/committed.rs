@@ -1,5 +1,6 @@
 //! Committed sumcheck round messages.
 
+use alloc::vec::Vec;
 use jolt_crypto::VectorCommitment;
 use jolt_field::Field;
 use jolt_transcript::{AppendToTranscript, Label, LabelWithCount, Transcript};

@@ -5,7 +5,8 @@
 //! - [`StreamingCommitment`] — chunked commitment without full materialization.
 //! - [`ZkOpeningScheme`] — zero-knowledge commitments and opening proofs.
 
-use std::fmt::Debug;
+use alloc::vec::Vec;
+use core::fmt::Debug;
 
 use jolt_crypto::{Commitment, HomomorphicCommitment};
 use jolt_field::Field;

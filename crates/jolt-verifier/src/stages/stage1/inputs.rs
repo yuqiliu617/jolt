@@ -1,5 +1,6 @@
 //! Typed clear-mode inputs consumed by stage 1.
 
+use alloc::vec::Vec;
 #[cfg(feature = "field-inline")]
 use jolt_claims::protocols::field_inline::{
     formulas::spartan as field_spartan, FieldInlineOpFlag, FieldInlineVirtualPolynomial,

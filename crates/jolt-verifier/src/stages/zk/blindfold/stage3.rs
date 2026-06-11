@@ -1,4 +1,5 @@
 use super::*;
+use alloc::vec::Vec;
 
 pub(super) fn add_stage3<PCS, VC, ZkProof>(
     input: &BlindFoldInputs<'_, PCS, VC, ZkProof>,

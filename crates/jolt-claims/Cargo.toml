@@ -9,7 +9,15 @@ description = "Shared claim and expression types for Jolt protocols"
 workspace = true
 
 [features]
-default = []
+default = ["std"]
+std = [
+  "jolt-field/std",
+  "jolt-lookup-tables/std",
+  "jolt-poly/std",
+  "jolt-riscv/std",
+  "serde/std",
+  "thiserror/std",
+]
 field-inline = []
 
 [dependencies]

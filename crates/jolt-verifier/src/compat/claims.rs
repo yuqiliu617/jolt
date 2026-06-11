@@ -1,7 +1,8 @@
 //! Compatibility opening-claim conversion.
 
 #[cfg(all(any(feature = "jolt-core-compat", test), not(feature = "zk")))]
-use std::collections::BTreeMap;
+use alloc::collections::BTreeMap;
+use alloc::vec::Vec;
 
 #[cfg(all(any(feature = "jolt-core-compat", test), not(feature = "zk")))]
 use crate::compat::ids as legacy;

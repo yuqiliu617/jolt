@@ -1,5 +1,8 @@
 //! Configuration types compatible with current `jolt-core` proof artifacts.
 
+use alloc::borrow::ToOwned;
+use alloc::string::String;
+use alloc::vec::Vec;
 use common::constants::{
     INSTRUCTION_PHASES_THRESHOLD_LOG_T, ONEHOT_CHUNK_THRESHOLD_LOG_T, REGISTER_COUNT, XLEN,
 };

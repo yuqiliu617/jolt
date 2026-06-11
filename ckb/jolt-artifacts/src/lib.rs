@@ -5,6 +5,12 @@
 //! stale artifacts to the verifier; bumping the format means bumping the
 //! version digits.
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+extern crate alloc;
+
+use alloc::vec::Vec;
+
 use serde::{de::DeserializeOwned, Serialize};
 
 pub const MAGIC: [u8; 8] = *b"JVRT0001";

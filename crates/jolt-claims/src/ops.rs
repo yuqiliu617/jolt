@@ -1,4 +1,5 @@
-use std::ops::{Add, Mul, Neg, Sub};
+use alloc::vec::Vec;
+use core::ops::{Add, Mul, Neg, Sub};
 
 use jolt_field::{FromPrimitiveInt, RingCore};
 

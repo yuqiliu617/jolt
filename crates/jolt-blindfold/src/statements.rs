@@ -1,3 +1,5 @@
+use alloc::string::String;
+use alloc::vec::Vec;
 use jolt_claims::Expr;
 use jolt_sumcheck::{
     CommittedOutputClaims, CommittedSumcheckConsistency, SumcheckDomainSpec, SumcheckStatement,

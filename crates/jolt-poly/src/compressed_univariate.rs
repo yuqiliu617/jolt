@@ -3,6 +3,7 @@
 //! Used in sumcheck proofs to save one field element per round polynomial.
 //! The linear term is recoverable from the sumcheck claim `f(0) + f(1)`.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};
 

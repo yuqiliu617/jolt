@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};
 

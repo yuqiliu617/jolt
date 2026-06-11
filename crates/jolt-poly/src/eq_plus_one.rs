@@ -9,6 +9,7 @@
 //!
 //! Both `x` and `y` are in **big-endian** bit ordering (`point[0]` = MSB).
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 use crate::thread::unsafe_allocate_zero_vec;

@@ -7,6 +7,7 @@
     reason = "ZK proof y_com/y_blinding are Dory-mode invariants; dory::prove/verify errors are caller-precondition violations surfaced via panic; the dory adapter's commit is unreachable because DoryScheme pre-computes row commitments"
 )]
 
+use alloc::vec::Vec;
 use dory::backends::arkworks::{ArkworksProverSetup, G1Routines, G2Routines};
 use dory::mode::Transparent;
 use dory::primitives::arithmetic::{
@@ -39,44 +40,44 @@ type InnerBN254 = dory::backends::arkworks::BN254;
 #[inline]
 pub(crate) fn jolt_fr_to_ark(f: &Fr) -> ArkFr {
     // SAFETY: Fr and ArkFr are both repr(transparent) over ark_bn254::Fr.
-    unsafe { std::mem::transmute_copy(f) }
+    unsafe { core::mem::transmute_copy(f) }
 }
 
 #[inline]
 pub(crate) fn ark_to_jolt_fr(ark: &ArkFr) -> Fr {
     // SAFETY: same layout as jolt_fr_to_ark.
-    unsafe { std::mem::transmute_copy(ark) }
+    unsafe { core::mem::transmute_copy(ark) }
 }
 
 #[inline]
 pub(crate) fn jolt_gt_to_ark(gt: &Bn254GT) -> ArkGT {
     // SAFETY: Bn254GT and ArkGT are both repr(transparent) over Fq12.
-    unsafe { std::mem::transmute_copy(gt) }
+    unsafe { core::mem::transmute_copy(gt) }
 }
 
 #[inline]
 pub(crate) fn ark_to_jolt_gt(ark: &ArkGT) -> Bn254GT {
     // SAFETY: same layout as jolt_gt_to_ark.
-    unsafe { std::mem::transmute_copy(ark) }
+    unsafe { core::mem::transmute_copy(ark) }
 }
 
 #[inline]
 pub(crate) fn jolt_g1_vec_to_ark(v: Vec<Bn254G1>) -> Vec<ArkG1> {
     // SAFETY: Bn254G1 and ArkG1 have identical size/align (repr(transparent)
     // over G1Projective), so Vec layout is identical.
-    unsafe { std::mem::transmute(v) }
+    unsafe { core::mem::transmute(v) }
 }
 
 #[inline]
 pub(crate) fn ark_to_jolt_g1_vec(v: Vec<ArkG1>) -> Vec<Bn254G1> {
     // SAFETY: same layout as jolt_g1_vec_to_ark.
-    unsafe { std::mem::transmute(v) }
+    unsafe { core::mem::transmute(v) }
 }
 
 #[inline]
 pub(crate) fn ark_to_jolt_g1(ark: ArkG1) -> Bn254G1 {
     // SAFETY: Bn254G1 and ArkG1 are both repr(transparent) over G1Projective.
-    unsafe { std::mem::transmute(ark) }
+    unsafe { core::mem::transmute(ark) }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

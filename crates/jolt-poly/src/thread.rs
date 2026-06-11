@@ -1,5 +1,6 @@
 //! Threading utilities for polynomial operations.
 
+use alloc::vec::Vec;
 use num_traits::Zero;
 
 /// Drops `data` in a background rayon task to avoid blocking the caller.
@@ -22,8 +23,8 @@ pub fn unsafe_allocate_zero_vec<T: Sized + Zero>(size: usize) -> Vec<T> {
         // all-zeros invariant that `alloc_zeroed` relies on.
         unsafe {
             let value = &T::zero();
-            let ptr = std::ptr::from_ref::<T>(value).cast::<u8>();
-            let bytes = std::slice::from_raw_parts(ptr, std::mem::size_of::<T>());
+            let ptr = core::ptr::from_ref::<T>(value).cast::<u8>();
+            let bytes = core::slice::from_raw_parts(ptr, core::mem::size_of::<T>());
             assert!(
                 bytes.iter().all(|&byte| byte == 0),
                 "T::zero() is not all-zero bytes — unsafe_allocate_zero_vec is invalid for this type"
@@ -35,10 +36,10 @@ pub fn unsafe_allocate_zero_vec<T: Sized + Zero>(size: usize) -> Vec<T> {
     // The caller guarantees that `T::zero()` is all-zero bytes, so the
     // resulting `Vec<T>` contains valid `T` values.
     unsafe {
-        let layout = std::alloc::Layout::array::<T>(size).unwrap();
-        let ptr = std::alloc::alloc_zeroed(layout).cast::<T>();
+        let layout = alloc::alloc::Layout::array::<T>(size).unwrap();
+        let ptr = alloc::alloc::alloc_zeroed(layout).cast::<T>();
         if ptr.is_null() {
-            std::alloc::handle_alloc_error(layout);
+            alloc::alloc::handle_alloc_error(layout);
         }
         #[expect(clippy::same_length_and_capacity)]
         Vec::from_raw_parts(ptr, size, size)

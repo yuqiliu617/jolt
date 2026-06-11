@@ -1,3 +1,5 @@
+use alloc::string::ToString;
+use alloc::vec::Vec;
 use jolt_claims::protocols::jolt::{
     formulas::{
         claim_reductions::{advice, hamming_weight},

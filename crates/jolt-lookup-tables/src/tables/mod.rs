@@ -219,7 +219,7 @@ impl<const XLEN: usize> LookupTableKind<XLEN> {
         // SAFETY: `LookupTableKind` is `#[repr(u8)]`, so its first byte is the
         // discriminant. See:
         // https://doc.rust-lang.org/reference/items/enumerations.html#pointer-casting
-        let byte = unsafe { *std::ptr::from_ref::<Self>(self).cast::<u8>() };
+        let byte = unsafe { *core::ptr::from_ref::<Self>(self).cast::<u8>() };
         byte as usize
     }
 

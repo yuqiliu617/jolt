@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 #[cfg(feature = "field-inline")]
 use jolt_claims::protocols::field_inline::FieldInlineOpeningId;
 use jolt_claims::protocols::jolt::JoltOpeningId;

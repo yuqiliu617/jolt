@@ -12,7 +12,8 @@ categories = ["cryptography"]
 workspace = true
 
 [features]
-default = ["serialization"]
+default = ["std", "serialization"]
+std = ["ark-serialize?/std", "serde?/std", "strum/std"]
 serialization = ["dep:ark-serialize", "dep:serde"]
 test-utils = ["dep:rand"]
 

@@ -1,7 +1,7 @@
 //! Wrapper types bridging dory-pcs to jolt-openings.
 
-use std::io::Cursor;
-
+use alloc::string::String;
+use alloc::vec::Vec;
 use ark_serialize::{CanonicalDeserialize, CanonicalSerialize};
 use dory::backends::arkworks::{
     ArkDoryProof, ArkG1, ArkGT, ArkworksProverSetup, ArkworksVerifierSetup,
@@ -145,14 +145,14 @@ fn canonical_deserialize<'de, T: CanonicalDeserialize, D: Deserializer<'de>>(
 /// the upstream `CanonicalDeserialize`, which calls `Vec::with_capacity(num_rounds)`
 /// and would OOM on attacker-supplied lengths near `u32::MAX`.
 fn validate_proof_round_count(buf: &[u8]) -> Result<(), String> {
-    let mut cursor = Cursor::new(buf);
-    let _: ArkGT = CanonicalDeserialize::deserialize_compressed(&mut cursor)
+    let mut reader: &[u8] = buf;
+    let _: ArkGT = CanonicalDeserialize::deserialize_compressed(&mut reader)
         .map_err(|e| format!("invalid Dory proof VMV.c: {e}"))?;
-    let _: ArkGT = CanonicalDeserialize::deserialize_compressed(&mut cursor)
+    let _: ArkGT = CanonicalDeserialize::deserialize_compressed(&mut reader)
         .map_err(|e| format!("invalid Dory proof VMV.d2: {e}"))?;
-    let _: ArkG1 = CanonicalDeserialize::deserialize_compressed(&mut cursor)
+    let _: ArkG1 = CanonicalDeserialize::deserialize_compressed(&mut reader)
         .map_err(|e| format!("invalid Dory proof VMV.e1: {e}"))?;
-    let num_rounds: u32 = CanonicalDeserialize::deserialize_compressed(&mut cursor)
+    let num_rounds: u32 = CanonicalDeserialize::deserialize_compressed(&mut reader)
         .map_err(|e| format!("invalid Dory proof round count: {e}"))?;
     if num_rounds as usize > MAX_SERIALIZED_PROOF_ROUNDS {
         return Err(format!(

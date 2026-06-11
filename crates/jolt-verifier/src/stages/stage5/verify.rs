@@ -1,3 +1,5 @@
+use alloc::string::ToString;
+use alloc::vec::Vec;
 #[cfg(feature = "field-inline")]
 use jolt_claims::protocols::field_inline::{
     formulas::registers as field_registers, FieldRegistersTraceDimensions,

@@ -81,7 +81,7 @@ pub fn batch_g1_additions_multi(bases: &[Bn254G1], indices_sets: &[Vec<usize>]) 
 
     // SAFETY: Bn254G1 is #[repr(transparent)] over G1Projective — identical layout.
     let projective: &[ark_bn254::G1Projective] = unsafe {
-        std::slice::from_raw_parts(
+        core::slice::from_raw_parts(
             bases.as_ptr().cast::<ark_bn254::G1Projective>(),
             bases.len(),
         )

@@ -29,6 +29,11 @@
 //! - [`Limbs<N>`] — fixed-width limb array for unreduced arithmetic
 //! - [`signed`] module — `S64`, `S128`, `S192`, `S256` and half-limb variants
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 mod accumulator;
 mod additive_group;
 mod canonical_bit_length;

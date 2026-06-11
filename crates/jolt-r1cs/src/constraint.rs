@@ -1,5 +1,7 @@
 //! Sparse per-cycle R1CS constraint matrices.
 
+use alloc::string::String;
+use alloc::vec::Vec;
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};
 use thiserror::Error as ThisError;

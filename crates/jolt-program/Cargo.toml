@@ -14,8 +14,15 @@ workspace = true
 [features]
 default = ["std", "serialization"]
 serialization = ["dep:ark-serialize", "dep:serde", "jolt-riscv/serialization"]
-std = ["common/std"]
-image = ["dep:object"]
+std = [
+  "common/std",
+  "ark-serialize?/std",
+  "serde?/std",
+  "jolt-riscv/std",
+  "thiserror/std",
+]
+# ELF parsing is host-only
+image = ["dep:object", "std"]
 
 [dependencies]
 ark-serialize = { workspace = true, optional = true }

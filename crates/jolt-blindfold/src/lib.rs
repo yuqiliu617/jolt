@@ -1,5 +1,10 @@
 //! Generic BlindFold claim, protocol, layout, and verifier-equation types.
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 mod builder;
 mod error;
 mod proof;

@@ -1,3 +1,4 @@
+use alloc::string::String;
 use jolt_crypto::VectorOpeningError;
 use jolt_field::FieldCore;
 use jolt_r1cs::{ClaimLoweringError, ConstraintMatrixEvalError};

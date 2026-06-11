@@ -7,6 +7,7 @@
 //! a factor of `k` and enables ~254× faster commitment via generator lookup
 //! instead of full MSM.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 use crate::multilinear::MultilinearPoly;

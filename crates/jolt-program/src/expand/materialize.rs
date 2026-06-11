@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_riscv::{
     JoltInstructionProfile, JoltInstructionRow, NormalizedOperands, SourceInstruction,
     SourceInstructionRow,

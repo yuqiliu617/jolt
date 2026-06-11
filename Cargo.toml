@@ -117,6 +117,7 @@ members = [
   "ckb/jolt-artifacts",
   "ckb/jolt-proof-export",
   "ckb/jolt-verify-smoke",
+  "ckb/jolt-verify-nostd-check",
 ]
 exclude = ["jolt-eval/fuzz"]
 
@@ -170,6 +171,9 @@ strip = false
 codegen-units = 1
 
 [patch.crates-io]
+# Vendored for the ckb-vm port: no_std verify path (see ckb/vendor/dory-pcs)
+dory-pcs = { path = "./ckb/vendor/dory-pcs" }
+dory-derive = { path = "./ckb/vendor/dory-derive" }
 ark-bn254 = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
 ark-ff = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
 ark-ec = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
@@ -273,7 +277,7 @@ dory = { package = "dory-pcs", version = "0.3.0", features = [
 clap = { version = "4.6.1", features = ["derive"] }
 eyre = "0.6.12"
 anyhow = "1.0.97"
-thiserror = "2.0.18"
+thiserror = { version = "2.0.18", default-features = false }
 derive_more = { version = "2.0.1", features = [
   "from",
 ], default-features = false }
@@ -383,19 +387,19 @@ secp256k1 = { version = "0.31", features = ["recovery", "rand"] }
 common = { path = "./common", default-features = false }
 tracer = { path = "./tracer", default-features = false }
 jolt-core = { path = "./jolt-core", default-features = false }
-jolt-blindfold = { path = "./crates/jolt-blindfold" }
-jolt-claims = { path = "./crates/jolt-claims" }
+jolt-blindfold = { path = "./crates/jolt-blindfold", default-features = false }
+jolt-claims = { path = "./crates/jolt-claims", default-features = false }
 jolt-crypto = { path = "./crates/jolt-crypto", default-features = false }
-jolt-field = { path = "./crates/jolt-field" }
-jolt-openings = { path = "./crates/jolt-openings" }
+jolt-field = { path = "./crates/jolt-field", default-features = false }
+jolt-openings = { path = "./crates/jolt-openings", default-features = false }
 jolt-verifier = { path = "./crates/jolt-verifier", default-features = false }
 jolt-poly = { path = "./crates/jolt-poly", default-features = false }
 jolt-r1cs = { path = "./crates/jolt-r1cs", default-features = false }
-jolt-transcript = { path = "./crates/jolt-transcript" }
-jolt-sumcheck = { path = "./crates/jolt-sumcheck" }
+jolt-transcript = { path = "./crates/jolt-transcript", default-features = false }
+jolt-sumcheck = { path = "./crates/jolt-sumcheck", default-features = false }
 jolt-riscv = { path = "./crates/jolt-riscv", default-features = false }
 jolt-program = { path = "./crates/jolt-program", default-features = false }
-jolt-lookup-tables = { path = "./crates/jolt-lookup-tables" }
+jolt-lookup-tables = { path = "./crates/jolt-lookup-tables", default-features = false }
 jolt-platform = { path = "./jolt-platform", default-features = false }
 jolt-sdk = { path = "./jolt-sdk", default-features = false }
 jolt-sdk-macros = { path = "./jolt-sdk/macros" }

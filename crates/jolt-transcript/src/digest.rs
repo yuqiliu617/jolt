@@ -29,7 +29,7 @@ pub struct DigestTranscript<D: Digest<OutputSize = U32> + 'static, F> {
     n_rounds: u32,
     #[cfg(test)]
     test_state: TestState,
-    _marker: std::marker::PhantomData<(fn() -> D, F)>,
+    _marker: core::marker::PhantomData<(fn() -> D, F)>,
 }
 
 impl<D, F> Clone for DigestTranscript<D, F>
@@ -43,7 +43,7 @@ where
             n_rounds: self.n_rounds,
             #[cfg(test)]
             test_state: self.test_state.clone(),
-            _marker: std::marker::PhantomData,
+            _marker: core::marker::PhantomData,
         }
     }
 }
@@ -58,12 +58,12 @@ where
     }
 }
 
-impl<D, F> std::fmt::Debug for DigestTranscript<D, F>
+impl<D, F> core::fmt::Debug for DigestTranscript<D, F>
 where
     D: Digest<OutputSize = U32>,
     F: jolt_field::TranscriptChallenge,
 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.debug_struct("DigestTranscript")
             .field("state", &format_args!("{:02x?}", self.state))
             .field("n_rounds", &self.n_rounds)
@@ -151,7 +151,7 @@ where
                 state_history: vec![hash],
                 expected_state_history: None,
             },
-            _marker: std::marker::PhantomData,
+            _marker: core::marker::PhantomData,
         }
     }
 

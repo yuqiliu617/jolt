@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use common::{
     constants::RAM_START_ADDRESS,
     jolt_device::{JoltDevice, MemoryLayoutError},

@@ -1,5 +1,6 @@
 //! Verifier-owned proof model types.
 
+use alloc::vec::Vec;
 use jolt_blindfold::BlindFoldProof;
 pub use jolt_claims::protocols::jolt::TracePolynomialOrder;
 use jolt_claims::protocols::jolt::{JoltOneHotConfig, JoltReadWriteConfig};

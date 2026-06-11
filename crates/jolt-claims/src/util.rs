@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 pub(crate) fn extend_unique<T: Clone + Eq>(target: &mut Vec<T>, values: &[T]) {
     for value in values {
         if !target.contains(value) {

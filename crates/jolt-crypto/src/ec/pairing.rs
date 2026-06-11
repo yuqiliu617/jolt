@@ -1,5 +1,5 @@
+use core::fmt::Debug;
 use jolt_field::Field;
-use std::fmt::Debug;
 
 use super::group::JoltGroup;
 

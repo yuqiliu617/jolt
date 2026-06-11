@@ -54,6 +54,8 @@
 //! final PCS opening proof: no clear output claim scalars are accepted by the
 //! verifier, and every hidden scalar that crosses a stage boundary is either in
 //! a committed output-claim row or in the final hiding evaluation commitment.
+use alloc::string::ToString;
+use alloc::vec::Vec;
 use jolt_blindfold::{BlindFoldProtocol, BlindFoldProtocolBuilder, OpeningAlias};
 #[cfg(feature = "field-inline")]
 use jolt_claims::protocols::field_inline::{

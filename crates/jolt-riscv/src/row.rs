@@ -1,4 +1,6 @@
 #[cfg(feature = "serialization")]
+use alloc::vec::Vec;
+#[cfg(feature = "serialization")]
 use ark_serialize::{CanonicalDeserialize, CanonicalSerialize};
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};

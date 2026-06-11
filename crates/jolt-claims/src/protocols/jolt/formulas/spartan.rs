@@ -1,4 +1,5 @@
-use std::fmt;
+use alloc::vec::Vec;
+use core::fmt;
 
 use jolt_field::{Field, RingCore};
 use jolt_poly::{
@@ -96,7 +97,7 @@ impl fmt::Display for SpartanOuterClaimError {
     }
 }
 
-impl std::error::Error for SpartanOuterClaimError {}
+impl core::error::Error for SpartanOuterClaimError {}
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SpartanOuterDimensions {

@@ -84,6 +84,7 @@ pub const fn input_column(input_index: usize) -> Option<usize> {
 const TWOS_COMPLEMENT_BIAS: i128 = 0x1_0000_0000_0000_0000;
 
 use crate::constraint::{ConstraintMatrixEvalError, SparseRow};
+use alloc::vec::Vec;
 use jolt_claims::protocols::jolt::{
     formulas::spartan::{
         SpartanOuterClaimError, SpartanOuterDimensions, SpartanOuterLinearForms,

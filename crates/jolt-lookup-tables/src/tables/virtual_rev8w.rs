@@ -1,5 +1,5 @@
-use std::array;
-use std::iter;
+use core::array;
+use core::iter;
 
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};

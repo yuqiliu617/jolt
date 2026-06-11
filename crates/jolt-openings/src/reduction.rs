@@ -1,5 +1,6 @@
 //! Opening claim reduction via random linear combination (RLC).
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use jolt_poly::{Point, HIGH_TO_LOW};
 use jolt_transcript::{AppendToTranscript, LabelWithCount, Transcript};
@@ -128,7 +129,7 @@ pub fn rlc_combine_scalars<F: Field>(evals: &[F], rho: F) -> F {
 }
 
 fn rho_powers<F: Field>(rho: F, n: usize) -> Vec<F> {
-    std::iter::successors(Some(F::from_u64(1)), |prev| Some(*prev * rho))
+    core::iter::successors(Some(F::from_u64(1)), |prev| Some(*prev * rho))
         .take(n)
         .collect()
 }

@@ -1,4 +1,5 @@
-use std::ops::Deref;
+use alloc::vec::Vec;
+use core::ops::Deref;
 
 use serde::{Deserialize, Serialize};
 

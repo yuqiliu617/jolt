@@ -1,5 +1,6 @@
 //! Typed inputs consumed by stage 5.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};
 

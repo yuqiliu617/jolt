@@ -1,6 +1,6 @@
 //! Mock PCS for testing. Truly homomorphic, no hiding or soundness.
 
-use std::marker::PhantomData;
+use core::marker::PhantomData;
 
 use jolt_crypto::Commitment;
 use jolt_field::Field;

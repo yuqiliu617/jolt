@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_crypto::HomomorphicCommitment;
 use jolt_field::Field;
 

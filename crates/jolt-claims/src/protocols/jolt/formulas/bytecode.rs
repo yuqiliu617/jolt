@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_field::{Field, RingCore};
 use jolt_lookup_tables::{InstructionLookupTable, LookupTableKind, XLEN};
 use jolt_poly::{EqPolynomial, IdentityPolynomial, MultilinearEvaluation};

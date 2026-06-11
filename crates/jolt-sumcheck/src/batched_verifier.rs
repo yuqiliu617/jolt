@@ -7,6 +7,7 @@
 //! earlier rounds. Each claim is scaled by $2^{N - n_i}$ where $N$ is the
 //! maximum `num_vars` across all claims.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use jolt_transcript::{AppendToTranscript, Transcript};
 

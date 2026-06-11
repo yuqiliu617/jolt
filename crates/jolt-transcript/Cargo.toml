@@ -22,8 +22,11 @@ light-poseidon = { workspace = true, optional = true }
 jolt-field = { path = "../jolt-field", default-features = false }
 
 [features]
-default = ["poseidon"]
+default = ["std", "poseidon"]
+std = ["jolt-field/std"]
+# light-poseidon does not support no_std
 poseidon = [
+  "std",
   "dep:ark-bn254",
   "dep:ark-ff",
   "dep:ark-serialize",

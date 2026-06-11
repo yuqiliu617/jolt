@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use common::jolt_device::MemoryLayout;
 use jolt_riscv::{JoltInstructionProfile, JoltInstructionRow};
 

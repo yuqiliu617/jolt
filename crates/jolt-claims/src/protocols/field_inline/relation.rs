@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use serde::{Deserialize, Serialize};
 
 use crate::util::extend_unique;
@@ -120,7 +121,7 @@ impl<F> FieldInlineProtocolClaims<F> {
         self.relations.push(relation);
     }
 
-    pub fn iter(&self) -> std::slice::Iter<'_, FieldInlineRelationClaims<F>> {
+    pub fn iter(&self) -> core::slice::Iter<'_, FieldInlineRelationClaims<F>> {
         self.relations.iter()
     }
 
@@ -163,7 +164,7 @@ impl<F> FieldInlineProtocolClaims<F> {
 
 impl<'a, F> IntoIterator for &'a FieldInlineProtocolClaims<F> {
     type Item = &'a FieldInlineRelationClaims<F>;
-    type IntoIter = std::slice::Iter<'a, FieldInlineRelationClaims<F>>;
+    type IntoIter = core::slice::Iter<'a, FieldInlineRelationClaims<F>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.relations.iter()

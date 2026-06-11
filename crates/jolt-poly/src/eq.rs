@@ -1,6 +1,7 @@
 //! Equality polynomial for multilinear evaluation.
 
-use std::ops::{Mul, SubAssign};
+use alloc::vec::Vec;
+use core::ops::{Mul, SubAssign};
 
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};

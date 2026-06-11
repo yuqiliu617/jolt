@@ -3,6 +3,7 @@
 use crate::error::SumcheckError;
 use crate::round_proof::ClearRound;
 use crate::scalar::SumcheckScalar;
+use alloc::vec::Vec;
 use jolt_poly::lagrange::{centered_domain_start, centered_power_sums, CenteredIntegerDomainError};
 
 pub trait SumcheckDomain<F: SumcheckScalar> {

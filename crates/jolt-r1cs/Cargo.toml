@@ -10,7 +10,7 @@ workspace = true
 
 [dependencies]
 jolt-claims.workspace = true
-jolt-field = { path = "../jolt-field" }
+jolt-field = { path = "../jolt-field", default-features = false }
 jolt-poly = { path = "../jolt-poly", default-features = false }
 num-traits.workspace = true
 rayon = { workspace = true, optional = true }
@@ -24,6 +24,15 @@ rand_chacha = { workspace = true }
 rand_core = { workspace = true }
 
 [features]
-default = ["parallel"]
+default = ["std", "parallel"]
+std = [
+  "jolt-claims/std",
+  "jolt-field/std",
+  "jolt-poly/std",
+  "num-traits/std",
+  "serde/std",
+  "thiserror/std",
+  "tracing/std",
+]
 field-inline = ["jolt-claims/field-inline"]
-parallel = ["rayon", "jolt-poly/parallel"]
+parallel = ["std", "rayon", "jolt-poly/parallel"]

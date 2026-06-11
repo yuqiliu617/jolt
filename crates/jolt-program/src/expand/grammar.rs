@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_riscv::{JoltInstructionKind, SourceInstructionKind, SourceInstructionRow};
 
 use crate::expand::{allocator::NUM_VIRTUAL_INSTRUCTION_REGISTERS, ExpansionError};

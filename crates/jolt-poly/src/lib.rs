@@ -43,6 +43,11 @@
 //! - [`math`]: Bit-manipulation utilities on `usize` via the `Math` trait (`pow2`, `log_2`)
 //! - [`thread`]: `drop_in_background_thread` (rayon) and `unsafe_allocate_zero_vec` (zero-init allocation)
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 mod binding;
 mod compressed_univariate;
 mod dense;

@@ -1,5 +1,6 @@
 //! Top-level verifier entry point.
 
+use alloc::string::ToString;
 use common::jolt_device::JoltDevice;
 use jolt_crypto::{HomomorphicCommitment, VectorCommitment};
 use jolt_field::{Field, RingAccumulator, WithAccumulator};

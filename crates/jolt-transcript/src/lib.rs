@@ -45,6 +45,10 @@
 //! ```
 
 #![deny(missing_docs)]
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
 
 mod blake2b;
 mod blanket;

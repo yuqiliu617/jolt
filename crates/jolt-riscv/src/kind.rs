@@ -1,4 +1,6 @@
 #[cfg(feature = "serialization")]
+use alloc::vec::Vec;
+#[cfg(feature = "serialization")]
 use ark_serialize::{
     CanonicalDeserialize, CanonicalSerialize, Compress, Read, SerializationError, Valid, Validate,
     Write,
@@ -1679,7 +1681,7 @@ impl CanonicalDeserialize for SourceInstructionKind {
         validate: Validate,
     ) -> Result<Self, SerializationError> {
         let bytes = Vec::<u8>::deserialize_with_mode(reader, compress, validate)?;
-        let name = std::str::from_utf8(&bytes).map_err(|_| SerializationError::InvalidData)?;
+        let name = core::str::from_utf8(&bytes).map_err(|_| SerializationError::InvalidData)?;
         Self::from_canonical_name(name).ok_or(SerializationError::InvalidData)
     }
 }

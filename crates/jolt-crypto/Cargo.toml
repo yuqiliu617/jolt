@@ -19,8 +19,24 @@ categories = ["cryptography"]
 workspace = true
 
 [features]
-default = ["bn254", "parallel"]
+default = ["std", "bn254", "parallel"]
+std = [
+  "jolt-field/std",
+  "jolt-poly/std",
+  "jolt-transcript/std",
+  "serde/std",
+  "ark-bn254?/std",
+  "ark-ec?/std",
+  "ark-ff?/std",
+  "ark-serialize?/std",
+  "ark-std?/std",
+  "num-bigint?/std",
+  "num-integer?/std",
+  "num-traits?/std",
+  "rand_core/std",
+]
 bn254 = [
+  "jolt-field/bn254",
   "dep:ark-bn254",
   "dep:ark-ec",
   "dep:ark-ff",
@@ -30,12 +46,12 @@ bn254 = [
   "dep:num-integer",
   "dep:num-traits",
 ]
-parallel = ["dep:rayon", "jolt-poly/parallel"]
+parallel = ["std", "dep:rayon", "jolt-poly/parallel"]
 
 [dependencies]
-jolt-field = { path = "../jolt-field" }
+jolt-field = { path = "../jolt-field", default-features = false }
 jolt-poly = { path = "../jolt-poly", default-features = false }
-jolt-transcript = { path = "../jolt-transcript" }
+jolt-transcript = { path = "../jolt-transcript", default-features = false }
 serde = { workspace = true, features = ["derive", "alloc"] }
 rand_core = { workspace = true }
 

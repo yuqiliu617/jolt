@@ -5,6 +5,11 @@
 //! | `ec` | Elliptic curve: `JoltGroup`, `PairingGroup`, `Pedersen` |
 //! | `commitment` | `Commitment`, `VectorCommitment`, `HomomorphicCommitment`, `DeriveSetup` |
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 pub mod ec;
 pub use ec::{JoltGroup, PairingGroup, Pedersen, PedersenSetup};
 

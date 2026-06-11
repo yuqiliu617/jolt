@@ -1,9 +1,9 @@
 #[cfg(feature = "allocative")]
 use allocative::Allocative;
+use core::fmt::{Debug, Display};
+use core::hash::Hash;
+use core::ops::Mul;
 use serde::{de::DeserializeOwned, Serialize};
-use std::fmt::{Debug, Display};
-use std::hash::Hash;
-use std::ops::Mul;
 
 use crate::{
     CanonicalBitLength, CanonicalBytes, CanonicalU64, FieldCore, FixedByteSize, FixedBytes,

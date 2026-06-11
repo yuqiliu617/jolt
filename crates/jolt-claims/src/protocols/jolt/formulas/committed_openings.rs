@@ -1,5 +1,6 @@
 //! Jolt committed-polynomial opening order used by the final PCS check.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 use super::super::{JoltCommittedPolynomial, JoltOpeningId, JoltRelationId};

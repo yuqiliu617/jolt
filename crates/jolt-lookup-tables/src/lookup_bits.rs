@@ -6,8 +6,8 @@
 //! because millions of these are created during proving.
 
 use crate::uninterleave_bits;
-use std::fmt::Display;
-use std::ops::BitAnd;
+use core::fmt::Display;
+use core::ops::BitAnd;
 
 /// A bitvector representing a substring of a lookup index.
 ///
@@ -81,7 +81,7 @@ impl LookupBits {
 
     /// Number of trailing zero bits.
     pub fn trailing_zeros(&self) -> u32 {
-        std::cmp::min(
+        core::cmp::min(
             u128::from_le_bytes(self.bytes).trailing_zeros(),
             self.len as u32,
         )
@@ -102,7 +102,7 @@ impl LookupBits {
 }
 
 impl Display for LookupBits {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{:0width$b}", self.as_u128(), width = self.len as usize)
     }
 }

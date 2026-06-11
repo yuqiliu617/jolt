@@ -8,6 +8,20 @@ description = "Generic BlindFold verifier infrastructure for the Jolt zkVM"
 [lints]
 workspace = true
 
+[features]
+default = ["std"]
+std = [
+  "jolt-claims/std",
+  "jolt-crypto/std",
+  "jolt-field/std",
+  "jolt-poly/std",
+  "jolt-r1cs/std",
+  "jolt-sumcheck/std",
+  "jolt-transcript/std",
+  "serde/std",
+  "thiserror/std",
+]
+
 [dependencies]
 jolt-claims.workspace = true
 jolt-crypto = { workspace = true, features = ["bn254"] }

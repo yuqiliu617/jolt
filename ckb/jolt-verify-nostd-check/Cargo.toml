@@ -1,0 +1,19 @@
+[package]
+name = "jolt-verify-nostd-check"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "no_std compile gate: monomorphizes the Jolt verify call for bare-metal riscv64"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+common = { workspace = true, default-features = false }
+jolt-artifacts = { path = "../jolt-artifacts", default-features = false }
+jolt-crypto = { workspace = true, default-features = false, features = ["bn254"] }
+jolt-dory = { path = "../../crates/jolt-dory", default-features = false }
+jolt-field = { workspace = true, default-features = false, features = ["bn254"] }
+jolt-transcript = { workspace = true, default-features = false }
+jolt-verifier = { workspace = true, default-features = false, features = ["transcript-blake2b"] }

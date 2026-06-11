@@ -10,6 +10,11 @@
 //! - [`constraints::field_constraints`] — native field-inline constraint layout
 //! - [`constraints::jolt`] — compile-time feature-gated composition of Jolt R1CS constraints
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 pub mod builder;
 pub mod column;
 pub mod constraint;

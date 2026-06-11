@@ -22,7 +22,16 @@ rand = { workspace = true }
 rand_core = { workspace = true }
 
 [features]
-default = ["bn254"]
+default = ["std", "bn254"]
+std = [
+  "ark-ff?/std",
+  "ark-serialize?/std",
+  "ark-bn254?/std",
+  "serde/std",
+  "rand/std",
+  "rand_core/std",
+  "num-traits/std",
+]
 bn254 = ["dep:ark-ff", "dep:ark-serialize", "dep:ark-bn254"]
 allocative = ["dep:allocative"]
 

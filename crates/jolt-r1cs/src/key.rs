@@ -15,6 +15,7 @@
 //! Matrix MLE factors as:
 //! $$\tilde{M}(r_x, r_y) = \widetilde{eq}(r_x^{cyc}, r_y^{cyc}) \cdot \tilde{M}_{local}(r_x^{con}, r_y^{var})$$
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 use jolt_poly::EqPolynomial;
 use serde::{Deserialize, Serialize};

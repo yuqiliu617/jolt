@@ -7,8 +7,8 @@
 //! Since challenges are now just field elements (`C = F`), these traits are trivially
 //! satisfied by any `F: Field`. They remain as named bounds for readability at use sites.
 
+use core::ops::{Add, Mul, Sub};
 use jolt_field::Field;
-use std::ops::{Add, Mul, Sub};
 
 /// A challenge value that can do arithmetic with field elements and other challenges.
 ///

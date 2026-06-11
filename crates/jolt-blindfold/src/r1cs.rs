@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_field::Field;
 use jolt_r1cs::{
     assert_claim_expr_eq, ClaimSourceTable, ClaimSources, LinearCombination, R1csBuilder, Variable,

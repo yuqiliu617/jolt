@@ -51,9 +51,9 @@ pub mod xor;
 pub mod xor_rot;
 pub mod xor_rotw;
 
+use core::fmt::Display;
+use core::ops::Index;
 use jolt_field::Field;
-use std::fmt::Display;
-use std::ops::Index;
 
 use crate::lookup_bits::LookupBits;
 
@@ -77,7 +77,7 @@ pub trait SparseDensePrefix<F: Field>: 'static + Sync {
 pub struct PrefixEval<F>(pub(crate) F);
 
 impl<F: Display> Display for PrefixEval<F> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.0)
     }
 }

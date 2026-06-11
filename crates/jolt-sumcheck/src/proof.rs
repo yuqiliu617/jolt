@@ -9,6 +9,7 @@ use crate::{
     verifier::SumcheckVerifier,
     SUMCHECK_ROUND_TRANSCRIPT_LABEL,
 };
+use alloc::vec::Vec;
 use jolt_poly::{CompressedPoly, UnivariatePoly};
 use jolt_transcript::{AppendToTranscript, Transcript};
 use serde::{Deserialize, Serialize};

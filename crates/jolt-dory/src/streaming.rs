@@ -1,5 +1,6 @@
 //! Streaming (chunked) commitment for the Dory scheme.
 
+use alloc::vec::Vec;
 use dory::backends::arkworks::G1Routines;
 use dory::primitives::arithmetic::DoryRoutines;
 use jolt_field::Fr;

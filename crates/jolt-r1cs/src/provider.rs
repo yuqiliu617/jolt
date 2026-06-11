@@ -5,6 +5,7 @@
 //!
 //! Used internally by `ProverData` — not a standalone `BufferProvider`.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 use crate::column::R1csColumn;

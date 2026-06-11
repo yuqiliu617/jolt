@@ -1,5 +1,6 @@
-use std::collections::BTreeMap;
-use std::ops::{Add, Neg, Sub};
+use alloc::collections::BTreeMap;
+use alloc::vec::Vec;
+use core::ops::{Add, Neg, Sub};
 
 use jolt_field::Field;
 use thiserror::Error;

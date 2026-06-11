@@ -51,7 +51,11 @@ transcript-blake2b = []
 ark-bn254.workspace = true
 jolt-optimizations.workspace = true
 ark-ec.workspace = true
-ark-ff.workspace = true
+# The arkworks fork gates its Allocative derives behind the literal feature
+# named "default" (cfg_attr(feature = "default", ...)), which jolt-core's
+# unconditional Allocative derives require. Previously enabled transitively
+# by crates.io dory-pcs; the vendored fork no longer does.
+ark-ff = { workspace = true, features = ["default"] }
 ark-serialize.workspace = true
 ark-std.workspace = true
 clap.workspace = true

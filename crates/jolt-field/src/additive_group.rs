@@ -1,5 +1,5 @@
+use core::ops::{Add, AddAssign, Neg, Sub, SubAssign};
 use num_traits::Zero;
-use std::ops::{Add, AddAssign, Neg, Sub, SubAssign};
 
 /// Minimal additive group operations shared by fields, rings, and accumulators.
 pub trait AdditiveGroup:

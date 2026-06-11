@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_riscv::{JoltInstructionProfile, JoltInstructionRow};
 
 use crate::expand::{materialize::MAX_FINAL_ROWS_PER_SOURCE, ExpansionError};

@@ -9,6 +9,7 @@
     reason = "transcript serialization failures are fatal"
 )]
 
+use alloc::vec::Vec;
 use dory::backends::arkworks::BN254;
 use dory::primitives::arithmetic::Group as DoryGroup;
 use dory::primitives::transcript::Transcript as DoryTranscript;

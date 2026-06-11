@@ -1,5 +1,7 @@
 //! Stage 6a verifier helpers.
 
+use alloc::string::ToString;
+use alloc::vec::Vec;
 use jolt_claims::protocols::jolt::{JoltRelationClaims, JoltRelationId};
 use jolt_crypto::VectorCommitment;
 use jolt_field::Field;

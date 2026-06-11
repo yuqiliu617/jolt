@@ -1,11 +1,11 @@
 use crate::AdditiveGroup;
-use num_traits::One;
-use std::{
+use core::{
     fmt::{Debug, Display},
     hash::Hash,
     iter::{Product, Sum},
     ops::{Mul, MulAssign},
 };
+use num_traits::One;
 
 /// Core ring arithmetic: additive group plus multiplication and one.
 pub trait RingCore:

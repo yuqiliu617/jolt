@@ -57,7 +57,7 @@ pub struct PoseidonTranscript<F: jolt_field::Field = jolt_field::Fr> {
     state_history: Vec<[u8; 32]>,
     #[cfg(test)]
     expected_state_history: Option<Vec<[u8; 32]>>,
-    _field: std::marker::PhantomData<F>,
+    _field: core::marker::PhantomData<F>,
 }
 
 impl<F: jolt_field::Field> Clone for PoseidonTranscript<F> {
@@ -71,7 +71,7 @@ impl<F: jolt_field::Field> Clone for PoseidonTranscript<F> {
             state_history: self.state_history.clone(),
             #[cfg(test)]
             expected_state_history: self.expected_state_history.clone(),
-            _field: std::marker::PhantomData,
+            _field: core::marker::PhantomData,
         }
     }
 }
@@ -82,8 +82,8 @@ impl<F: jolt_field::Field> Default for PoseidonTranscript<F> {
     }
 }
 
-impl<F: jolt_field::Field> std::fmt::Debug for PoseidonTranscript<F> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<F: jolt_field::Field> core::fmt::Debug for PoseidonTranscript<F> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.debug_struct("PoseidonTranscript")
             .field("state", &format_args!("{:02x?}", self.state))
             .field("n_rounds", &self.n_rounds)
@@ -185,7 +185,7 @@ impl<F: jolt_field::Field> Transcript for PoseidonTranscript<F> {
             state_history: vec![state],
             #[cfg(test)]
             expected_state_history: None,
-            _field: std::marker::PhantomData,
+            _field: core::marker::PhantomData,
         }
     }
 

@@ -11,6 +11,10 @@ categories = ["cryptography"]
 [lints]
 workspace = true
 
+[features]
+default = ["std"]
+std = ["jolt-field/std", "jolt-riscv/std", "serde/std", "strum/std"]
+
 [dependencies]
 jolt-field = { workspace = true }
 jolt-riscv = { workspace = true, features = ["serialization"] }

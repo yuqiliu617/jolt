@@ -9,7 +9,7 @@ description = "Polynomial commitment scheme traits and opening reduction for the
 workspace = true
 
 [dependencies]
-jolt-crypto.workspace = true
+jolt-crypto = { workspace = true, features = ["bn254"] }
 jolt-field.workspace = true
 jolt-poly.workspace = true
 jolt-transcript.workspace = true
@@ -32,4 +32,14 @@ harness = false
 ignored = ["rand", "jolt-crypto"]
 
 [features]
+default = ["std"]
+std = [
+  "jolt-crypto/std",
+  "jolt-field/std",
+  "jolt-poly/std",
+  "jolt-transcript/std",
+  "serde/std",
+  "tracing/std",
+  "thiserror/std",
+]
 test-utils = []

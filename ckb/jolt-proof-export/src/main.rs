@@ -63,7 +63,7 @@ fn main() -> Result<()> {
 
     let (model_preprocessing, public_io, model_proof) = prove_and_convert(&preset)?;
 
-    jolt_verifier::verify::<Fr, DoryScheme, Pedersen<Bn254G1>, Blake2bTranscript>(
+    jolt_verifier::verify::<Fr, DoryScheme, Pedersen<Bn254G1>, Blake2bTranscript<Fr>>(
         &model_preprocessing,
         &public_io,
         &model_proof,

@@ -1,5 +1,6 @@
 //! Typed outputs produced by stage 6a verification.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 #[derive(Clone, Debug, PartialEq, Eq)]

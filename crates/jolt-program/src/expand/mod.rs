@@ -28,6 +28,7 @@ mod tests;
 pub use allocator::ExpansionAllocator;
 pub use error::ExpansionError;
 
+use alloc::vec::Vec;
 use allocator::{
     mcause_register, mepc_register, mstatus_register, mtval_register, reservation_d_register,
     reservation_w_register, trap_handler_register, virtual_register_for_csr,
@@ -130,7 +131,7 @@ fn expand_source_instruction_with_provider<P: InlineExpansionProvider + ?Sized>(
                 finalize_inline_provider_instructions(source, allocator, instructions, profile)
             })
     } else {
-        let owned_allocator = std::mem::take(allocator);
+        let owned_allocator = core::mem::take(allocator);
         let mut state = ExpansionState::new(owned_allocator, profile);
         let result = state
             .expand_source_recursive(instruction)

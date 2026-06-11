@@ -1,6 +1,7 @@
 //! Univariate polynomial in coefficient form.
 
-use std::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use alloc::vec::Vec;
+use core::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use jolt_field::Field;
 use serde::{Deserialize, Serialize};

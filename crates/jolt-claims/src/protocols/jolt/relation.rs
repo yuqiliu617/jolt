@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use serde::{Deserialize, Serialize};
 
 use crate::util::extend_unique;
@@ -120,7 +121,7 @@ impl<F> JoltProtocolClaims<F> {
         self.relations.push(relation);
     }
 
-    pub fn iter(&self) -> std::slice::Iter<'_, JoltRelationClaims<F>> {
+    pub fn iter(&self) -> core::slice::Iter<'_, JoltRelationClaims<F>> {
         self.relations.iter()
     }
 
@@ -163,7 +164,7 @@ impl<F> JoltProtocolClaims<F> {
 
 impl<'a, F> IntoIterator for &'a JoltProtocolClaims<F> {
     type Item = &'a JoltRelationClaims<F>;
-    type IntoIter = std::slice::Iter<'a, JoltRelationClaims<F>>;
+    type IntoIter = core::slice::Iter<'a, JoltRelationClaims<F>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.relations.iter()

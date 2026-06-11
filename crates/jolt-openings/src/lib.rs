@@ -29,6 +29,11 @@
 //!     (+ begin/feed/finish)
 //! ```
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 mod claims;
 mod error;
 #[cfg(any(test, feature = "test-utils"))]

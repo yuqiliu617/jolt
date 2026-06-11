@@ -7,7 +7,7 @@
 //! Every instruction implements the [`Flags`] trait, returning its static flag
 //! configuration via [`CircuitFlagSet`] and [`InstructionFlagSet`] packed bitfields.
 
-use std::ops::Index;
+use core::ops::Index;
 
 use strum::EnumCount;
 

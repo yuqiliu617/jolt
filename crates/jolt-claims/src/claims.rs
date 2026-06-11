@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_field::RingCore;
 use serde::{Deserialize, Serialize};
 

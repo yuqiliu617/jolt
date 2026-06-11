@@ -1,5 +1,10 @@
 //! Verifier model crate for Jolt proofs.
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[macro_use]
+extern crate alloc;
+
 pub mod compat;
 pub mod config;
 pub mod error;

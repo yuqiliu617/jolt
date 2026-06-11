@@ -1,5 +1,6 @@
 //! PCS error types.
 
+use alloc::string::String;
 #[derive(Debug, thiserror::Error)]
 pub enum OpeningsError {
     #[error("opening proof verification failed")]

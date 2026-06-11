@@ -1,3 +1,6 @@
+use alloc::string::String;
+use alloc::string::ToString;
+use alloc::vec::Vec;
 use jolt_field::Field;
 use jolt_r1cs::{LinearCombination, R1csBuilder, Variable};
 use thiserror::Error;

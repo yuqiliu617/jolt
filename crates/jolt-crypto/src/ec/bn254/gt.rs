@@ -1,5 +1,6 @@
-use std::fmt::Debug;
-use std::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use alloc::vec::Vec;
+use core::fmt::Debug;
+use core::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use ark_bn254::{Fq12, Fr};
 use ark_ff::{AdditiveGroup, Field as ArkField, PrimeField};
@@ -32,7 +33,7 @@ use super::field_to_fr;
 pub struct Bn254GT(pub(crate) Fq12);
 
 impl Debug for Bn254GT {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.debug_tuple("Bn254GT").field(&self.0).finish()
     }
 }

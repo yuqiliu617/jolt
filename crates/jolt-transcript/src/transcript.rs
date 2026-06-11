@@ -3,6 +3,8 @@
 //! This module provides the [`Transcript`] trait for building Fiat-Shamir transcripts
 //! and the [`AppendToTranscript`] trait for types that can be absorbed into a transcript.
 
+use alloc::vec::Vec;
+
 use crate::domain::{Label, LabelWithCount};
 use jolt_field::{Field, FromPrimitiveInt};
 
@@ -24,7 +26,7 @@ pub trait Transcript: Default + Clone + Sync + Send + 'static {
     ///
     /// For hash-based transcripts this is `F` (the field type), so challenges
     /// can be used directly in polynomial operations without conversion.
-    type Challenge: Copy + Default + PartialEq + Eq + std::fmt::Debug + std::hash::Hash;
+    type Challenge: Copy + Default + PartialEq + Eq + core::fmt::Debug + core::hash::Hash;
 
     /// Creates a new transcript with the given domain separation label.
     ///

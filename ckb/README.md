@@ -15,6 +15,14 @@ upstream's standalone `jolt-verifier` crate plus its modular dependency crates;
   graph must stay free of prover/host machinery (no jolt-core, tracer,
   jolt-sdk, jolt-inlines, rayon); `check-isolation.sh` enforces this. This
   crate is the precursor of the ckb-vm contract.
+- **jolt-verify-nostd-check** — `#![no_std]` library that monomorphizes the
+  full artifact-decode + verify flow. The no_std gate:
+  `cargo check -p jolt-verify-nostd-check --target riscv64imac-unknown-none-elf`.
+- **vendor/dory-pcs**, **vendor/dory-derive** — vendored fork of the external
+  Dory PCS (crates.io 0.3.0) wired in via `[patch.crates-io]`. Changes: `std`
+  feature (default on) with a no_std verify path (`ark_std::io` instead of
+  `std::io`, alloc imports, `len.ilog2()`), Allocative/getrandom decoupled,
+  `random()` gated to std (prover/setup only), unused `bincode` dropped.
 
 ## Usage
 
@@ -27,6 +35,9 @@ cargo run --profile build-fast -p jolt-verify-smoke -- target/jolt-artifacts
 
 # Dependency isolation guard
 bash ckb/check-isolation.sh
+
+# no_std gate: the whole verify stack on bare-metal riscv64
+cargo check -p jolt-verify-nostd-check --target riscv64imac-unknown-none-elf
 ```
 
 ## Feature wiring
@@ -37,6 +48,15 @@ build can opt out of rayon: `jolt-verify-smoke` depends on `jolt-verifier`,
 dependency of `jolt-dory` is declared with only the `arkworks` + `zk` features;
 disk caching of SRS generation is behind jolt-dory's `srs-cache` feature
 (default on, host-only concern).
+
+Every crate in the verify stack additionally carries a `std` feature (default
+on, forwarded down the dependency tree) and is `#![cfg_attr(not(feature =
+"std"), no_std)]` + `extern crate alloc`. Conventions used throughout:
+`core::`/`alloc::` paths instead of `std::`, no `std::sync`/`std::io` in the
+verify path, `light-poseidon` (std-only) stays behind the `poseidon` transcript
+feature, and `jolt-program`'s ELF parsing (`image` feature) implies `std`.
+`ckb/fix-alloc-imports.py` is the helper that mechanically inserted alloc
+imports from rustc errors during the migration; kept for future rebases.
 
 ## Known issues at the pin (7f97cbad)
 

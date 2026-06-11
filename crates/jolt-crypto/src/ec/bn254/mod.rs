@@ -21,7 +21,7 @@ macro_rules! impl_jolt_group_wrapper {
         // SAFETY: $wrapper is #[repr(transparent)] over $projective.
         // Unsafe pointer casts in batch_addition and glv rely on this.
         const _: () =
-            assert!(::std::mem::size_of::<$wrapper>() == ::std::mem::size_of::<$projective>());
+            assert!(::core::mem::size_of::<$wrapper>() == ::core::mem::size_of::<$projective>());
 
         impl $wrapper {
             /// Unwraps into the inner arkworks projective type.
@@ -31,8 +31,8 @@ macro_rules! impl_jolt_group_wrapper {
             }
         }
 
-        impl ::std::fmt::Debug for $wrapper {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        impl ::core::fmt::Debug for $wrapper {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 let affine = <$projective as ::ark_ec::CurveGroup>::into_affine(self.0);
                 f.debug_tuple(stringify!($wrapper)).field(&affine).finish()
             }
@@ -52,7 +52,7 @@ macro_rules! impl_jolt_group_wrapper {
             }
         }
 
-        impl ::std::ops::Add for $wrapper {
+        impl ::core::ops::Add for $wrapper {
             type Output = Self;
             #[inline(always)]
             fn add(self, rhs: Self) -> Self {
@@ -60,7 +60,7 @@ macro_rules! impl_jolt_group_wrapper {
             }
         }
 
-        impl<'a> ::std::ops::Add<&'a $wrapper> for $wrapper {
+        impl<'a> ::core::ops::Add<&'a $wrapper> for $wrapper {
             type Output = Self;
             #[inline(always)]
             fn add(self, rhs: &'a $wrapper) -> Self {
@@ -68,7 +68,7 @@ macro_rules! impl_jolt_group_wrapper {
             }
         }
 
-        impl ::std::ops::Sub for $wrapper {
+        impl ::core::ops::Sub for $wrapper {
             type Output = Self;
             #[inline(always)]
             fn sub(self, rhs: Self) -> Self {
@@ -76,7 +76,7 @@ macro_rules! impl_jolt_group_wrapper {
             }
         }
 
-        impl<'a> ::std::ops::Sub<&'a $wrapper> for $wrapper {
+        impl<'a> ::core::ops::Sub<&'a $wrapper> for $wrapper {
             type Output = Self;
             #[inline(always)]
             fn sub(self, rhs: &'a $wrapper) -> Self {
@@ -84,7 +84,7 @@ macro_rules! impl_jolt_group_wrapper {
             }
         }
 
-        impl ::std::ops::Neg for $wrapper {
+        impl ::core::ops::Neg for $wrapper {
             type Output = Self;
             #[inline(always)]
             fn neg(self) -> Self {
@@ -92,14 +92,14 @@ macro_rules! impl_jolt_group_wrapper {
             }
         }
 
-        impl ::std::ops::AddAssign for $wrapper {
+        impl ::core::ops::AddAssign for $wrapper {
             #[inline(always)]
             fn add_assign(&mut self, rhs: Self) {
                 self.0 += rhs.0;
             }
         }
 
-        impl ::std::ops::SubAssign for $wrapper {
+        impl ::core::ops::SubAssign for $wrapper {
             #[inline(always)]
             fn sub_assign(&mut self, rhs: Self) {
                 self.0 -= rhs.0;
@@ -109,7 +109,7 @@ macro_rules! impl_jolt_group_wrapper {
         impl ::serde::Serialize for $wrapper {
             fn serialize<S: ::serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
                 use ::ark_serialize::CanonicalSerialize;
-                let mut buf = Vec::with_capacity(self.0.compressed_size());
+                let mut buf = ::alloc::vec::Vec::with_capacity(self.0.compressed_size());
                 self.0
                     .serialize_compressed(&mut buf)
                     .map_err(::serde::ser::Error::custom)?;
@@ -122,7 +122,7 @@ macro_rules! impl_jolt_group_wrapper {
                 deserializer: D,
             ) -> Result<Self, D::Error> {
                 use ::ark_serialize::CanonicalDeserialize;
-                let buf = <Vec<u8>>::deserialize(deserializer)?;
+                let buf = <::alloc::vec::Vec<u8>>::deserialize(deserializer)?;
                 let inner = <$projective>::deserialize_compressed(&buf[..])
                     .map_err(::serde::de::Error::custom)?;
                 Ok(Self(inner))
@@ -132,7 +132,7 @@ macro_rules! impl_jolt_group_wrapper {
         impl ::jolt_transcript::AppendToTranscript for $wrapper {
             fn append_to_transcript<T: ::jolt_transcript::Transcript>(&self, transcript: &mut T) {
                 use ::ark_serialize::CanonicalSerialize;
-                let mut buf = Vec::with_capacity(self.0.compressed_size());
+                let mut buf = ::alloc::vec::Vec::with_capacity(self.0.compressed_size());
                 self.0
                     .serialize_compressed(&mut buf)
                     .expect(concat!(stringify!($wrapper), " serialization cannot fail"));
@@ -166,10 +166,12 @@ macro_rules! impl_jolt_group_wrapper {
                 use ::ark_ec::{CurveGroup, VariableBaseMSM};
                 use ::ark_ff::PrimeField;
                 debug_assert_eq!(bases.len(), scalars.len());
-                let affines: Vec<$affine> = bases.iter().map(|b| b.0.into_affine()).collect();
-                let fr_scalars: Vec<::ark_bn254::Fr> =
+                let affines: ::alloc::vec::Vec<$affine> =
+                    bases.iter().map(|b| b.0.into_affine()).collect();
+                let fr_scalars: ::alloc::vec::Vec<::ark_bn254::Fr> =
                     scalars.iter().map(super::field_to_fr).collect();
-                let bigints: Vec<_> = fr_scalars.iter().map(|s| s.into_bigint()).collect();
+                let bigints: ::alloc::vec::Vec<_> =
+                    fr_scalars.iter().map(|s| s.into_bigint()).collect();
                 Self(<$projective as VariableBaseMSM>::msm_bigint(
                     &affines, &bigints,
                 ))
@@ -195,6 +197,7 @@ pub use g1::Bn254G1;
 pub use g2::Bn254G2;
 pub use gt::Bn254GT;
 
+use alloc::vec::Vec;
 use ark_bn254::Bn254 as ArkBn254;
 use ark_ec::pairing::Pairing;
 use ark_ec::CurveGroup;

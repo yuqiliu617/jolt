@@ -6,6 +6,7 @@
 //! layered on once those bridge payloads are explicit in the trace.
 
 use crate::constraint::SparseRow;
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 type ConstraintRows<F> = (Vec<SparseRow<F>>, Vec<SparseRow<F>>, Vec<SparseRow<F>>);

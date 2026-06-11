@@ -1,3 +1,4 @@
+use alloc::string::ToString;
 use jolt_claims::protocols::jolt::{
     formulas::spartan::SpartanOuterDimensions, JoltRelationId, JoltSumcheckDomain, JoltSumcheckSpec,
 };

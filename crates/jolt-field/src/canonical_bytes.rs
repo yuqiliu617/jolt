@@ -1,3 +1,5 @@
+use alloc::vec::Vec;
+
 /// Canonical little-endian byte encoding.
 pub trait CanonicalBytes: Sized + crate::FixedByteSize {
     /// Writes the canonical little-endian encoding into `out`.

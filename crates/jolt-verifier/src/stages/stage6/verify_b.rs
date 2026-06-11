@@ -1,5 +1,7 @@
 //! Stage 6b verifier helpers.
 
+use alloc::string::ToString;
+use alloc::vec::Vec;
 use jolt_claims::protocols::jolt::{
     formulas::claim_reductions::advice, AdviceClaimReductionLayout, AdviceClaimReductionPublic,
     JoltAdviceKind, JoltPublicId, JoltRelationClaims, JoltRelationId,

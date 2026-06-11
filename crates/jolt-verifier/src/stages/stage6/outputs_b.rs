@@ -1,5 +1,6 @@
 //! Typed outputs produced by stage 6b verification.
 
+use alloc::vec::Vec;
 use jolt_claims::protocols::jolt::JoltAdviceKind;
 use jolt_field::Field;
 

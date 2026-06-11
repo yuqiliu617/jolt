@@ -12,14 +12,37 @@ categories = ["cryptography"]
 workspace = true
 
 [features]
-default = ["transcript-blake2b", "parallel"]
+default = ["std", "transcript-blake2b", "parallel"]
+std = [
+  "ark-serialize/std",
+  "common/std",
+  "jolt-blindfold/std",
+  "jolt-claims/std",
+  "jolt-crypto/std",
+  "jolt-dory?/std",
+  "jolt-field/std",
+  "jolt-lookup-tables/std",
+  "jolt-openings/std",
+  "jolt-poly/std",
+  "jolt-program/std",
+  "jolt-r1cs/std",
+  "jolt-riscv/std",
+  "jolt-sumcheck/std",
+  "jolt-transcript/std",
+  "num-traits/std",
+  "serde/std",
+  "thiserror/std",
+]
 parallel = [
+  "std",
   "jolt-crypto/parallel",
   "jolt-poly/parallel",
   "jolt-r1cs/parallel",
   "jolt-dory?/parallel",
 ]
+# jolt-core is std-only
 jolt-core-compat = [
+  "std",
   "dep:ark-bn254",
   "dep:jolt-core",
   "dep:jolt-dory",
@@ -58,5 +81,6 @@ thiserror.workspace = true
 jolt-core = { workspace = true, features = ["minimal"] }
 jolt-crypto = { workspace = true, features = ["bn254"] }
 jolt-dory = { path = "../jolt-dory" }
+jolt-transcript = { workspace = true, features = ["poseidon"] }
 postcard = { workspace = true, features = ["use-std"] }
 serde_json = { workspace = true, features = ["std"] }

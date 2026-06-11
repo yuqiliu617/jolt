@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use jolt_crypto::VectorCommitmentOpening;
 use jolt_field::Field;
 use jolt_sumcheck::CompressedSumcheckProof;

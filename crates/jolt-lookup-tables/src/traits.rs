@@ -1,8 +1,8 @@
 //! Lookup-table-related traits.
 
+use core::fmt::Debug;
 use jolt_field::Field;
 use jolt_riscv::{JoltInstruction, JoltInstructionRowData};
-use std::fmt::Debug;
 
 use crate::challenge_ops::{ChallengeOps, FieldOps};
 use crate::interleave::interleave_bits;

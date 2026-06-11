@@ -1,5 +1,6 @@
 //! Typed outputs produced by stage 7 verification.
 
+use alloc::vec::Vec;
 use jolt_claims::protocols::jolt::JoltAdviceKind;
 use jolt_field::Field;
 use jolt_poly::{Point, HIGH_TO_LOW};

@@ -11,6 +11,7 @@
 //! without materializing the combined table. Its [`fold_rows`](MultilinearPoly::fold_rows)
 //! distributes across constituents, avoiding allocation of the combined table.
 
+use alloc::vec::Vec;
 use jolt_field::Field;
 
 use crate::Polynomial;

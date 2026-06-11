@@ -9,6 +9,10 @@ publish = false
 [lints]
 workspace = true
 
+[features]
+default = ["std"]
+std = ["serde/std", "thiserror/std"]
+
 [dependencies]
 postcard = { workspace = true, features = ["alloc"] }
 serde.workspace = true
