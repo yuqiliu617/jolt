@@ -1,0 +1,30 @@
+[workspace]
+resolver = "2"
+members = ["jolt-verify-contract"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+# Must stay in lockstep with the root workspace's [patch.crates-io]: the jolt
+# path-dependencies below resolve arkworks/dory through THIS table, and
+# jolt-dory's repr(transparent) transmutes require the exact same arkworks
+# build as dory-pcs.
+[patch.crates-io]
+dory-pcs = { path = "../vendor/dory-pcs" }
+dory-derive = { path = "../vendor/dory-derive" }
+ark-bn254 = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+ark-ff = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+ark-ec = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+ark-serialize = { git = "https://github.com/a16z/arkworks-algebra", branch = "dev/twist-shout" }
+
+# opt-level "s" over 3: the VM gives scripts 4 MB total, so code bytes
+# compete directly with heap; measured text shrink frees ~0.5 MB for the
+# allocator at a modest cycle cost.
+[profile.release]
+opt-level = "s"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = false
+overflow-checks = true

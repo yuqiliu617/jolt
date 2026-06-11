@@ -119,7 +119,7 @@ members = [
   "ckb/jolt-verify-smoke",
   "ckb/jolt-verify-nostd-check",
 ]
-exclude = ["jolt-eval/fuzz"]
+exclude = ["jolt-eval/fuzz", "ckb/contract"]
 
 [features]
 host = ["jolt-sdk/host"]

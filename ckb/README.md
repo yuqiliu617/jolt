@@ -23,6 +23,13 @@ upstream's standalone `jolt-verifier` crate plus its modular dependency crates;
   feature (default on) with a no_std verify path (`ark_std::io` instead of
   `std::io`, alloc imports, `len.ilog2()`), Allocative/getrandom decoupled,
   `random()` gated to std (prover/setup only), unused `bincode` dropped.
+- **contract/** — separate cargo workspace (own `[patch.crates-io]` table,
+  kept in lockstep with the root) building the actual CKB script:
+  - `jolt-verify-contract` — ckb-std entry, loads the three artifacts from
+    transaction witnesses (provisional layout: group-input witnesses 0/1/2).
+  - `jolt-verify-bench` — same flow with artifacts embedded via
+    `include_bytes!` so it runs under a bare ckb-vm runner for cycle
+    measurement (`--features bench-embedded`).
 
 ## Usage
 
@@ -38,7 +45,46 @@ bash ckb/check-isolation.sh
 
 # no_std gate: the whole verify stack on bare-metal riscv64
 cargo check -p jolt-verify-nostd-check --target riscv64imac-unknown-none-elf
+
+# Build the CKB script + bench binary (separate workspace; .cargo/config.toml
+# pins the riscv64imac target and -C target-feature=-a,+forced-atomics)
+cd ckb/contract && cargo build --release -p jolt-verify-contract --features bench-embedded
+
+# Measure cycles in ckb-vm (use the local ckb-vm repo's runner; asm64 mode is
+# faster wall-clock, interpreter64 needs no C toolchain — cycle counts match)
+cd ../../../ckb-vm
+cargo run --release --example ckb_vm_runner -- --mode interpreter64 \
+  ../jolt/ckb/contract/target/riscv64imac-unknown-none-elf/release/jolt-verify-bench
 ```
+
+## ckb-vm status (fibonacci proof, guest input 100)
+
+The bench binary verifies the exported fibonacci proof inside ckb-vm:
+`exit=Ok(0)`, **3.75 G cycles** (release, opt-level=s). Reference points:
+CKB's `MAX_BLOCK_CYCLES` is 3.5 G and a typical two-in-two-out transfer is
+3.5 M cycles — verification currently costs slightly more than an entire
+block, so heavy cycle optimization (Straus-Shamir multi-exp, GT exponentiation
+windows, pairing tuning) is the next phase's core work.
+
+Memory: the VM gives a script 4 MB total. The ELF is ~1.5 MB text
+(opt-level=s; opt-level=3 is ~2.1 MB and forces the heap below the
+verifier's working set) + 2.3 MB buddy heap + ~190 KB stack headroom.
+Host-measured peak live heap for this verification is ~1.6 MiB
+(`jolt-verify-smoke` prints heap stats). Larger guests/traces will push both
+the artifact sizes and the working set up — re-measure with bigger fixtures
+before trusting these margins.
+
+Build notes:
+- `-C target-feature=-a,+forced-atomics`: mainnet VMs run IMC+B+MOP without
+  atomics. `-a` alone makes LLVM crash on lowering some atomic RMW ops
+  (`Cannot select: AtomicLoadAdd`); `+forced-atomics` lowers them to libcalls
+  instead — `__atomic_*` come from ckb-std's `dummy-atomic`, and the few
+  `__sync_*` ones (from `Arc` in serial-rayon fallbacks) from
+  `src/sync_shims.rs`. rustc warns the flag combination is "unsound" because
+  it changes the atomics ABI — irrelevant here since every object in the
+  final ELF is built with the same flags and the VM is single-threaded.
+- For panic messages in release builds add `-C debug-assertions` to
+  RUSTFLAGS (enables ckb-std's `debug!`; costs ~2x cycles).
 
 ## Feature wiring
 

@@ -1,0 +1,36 @@
+[package]
+name = "jolt-verify-contract"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+description = "CKB script verifying Jolt proofs with the no_std jolt-verifier stack"
+publish = false
+
+[features]
+# Embeds artifacts from ../../target/jolt-artifacts at compile time; used by
+# the cycle-measurement binary so it can run under a bare ckb-vm runner
+# (no CKB transaction context / witness syscalls required).
+bench-embedded = []
+
+[dependencies]
+ckb-std = { version = "1.1.0", default-features = false, features = [
+  "allocator",
+  "dummy-atomic",
+  "ckb-types",
+] }
+common = { path = "../../../common", default-features = false }
+jolt-artifacts = { path = "../../jolt-artifacts", default-features = false }
+jolt-crypto = { path = "../../../crates/jolt-crypto", default-features = false, features = ["bn254"] }
+jolt-dory = { path = "../../../crates/jolt-dory", default-features = false }
+jolt-field = { path = "../../../crates/jolt-field", default-features = false, features = ["bn254"] }
+jolt-transcript = { path = "../../../crates/jolt-transcript", default-features = false }
+jolt-verifier = { path = "../../../crates/jolt-verifier", default-features = false, features = ["transcript-blake2b"] }
+
+[[bin]]
+name = "jolt-verify-contract"
+path = "src/main.rs"
+
+[[bin]]
+name = "jolt-verify-bench"
+path = "src/bench.rs"
+required-features = ["bench-embedded"]
