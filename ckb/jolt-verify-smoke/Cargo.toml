@@ -1,0 +1,21 @@
+[package]
+name = "jolt-verify-smoke"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Verify-only consumer of exported Jolt artifacts; precursor of the ckb-vm contract"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+common.workspace = true
+jolt-artifacts = { path = "../jolt-artifacts" }
+jolt-crypto = { workspace = true, default-features = false, features = ["bn254"] }
+jolt-dory = { path = "../../crates/jolt-dory", default-features = false }
+jolt-field.workspace = true
+jolt-transcript.workspace = true
+jolt-verifier = { workspace = true, default-features = false, features = ["transcript-blake2b"] }
+serde.workspace = true

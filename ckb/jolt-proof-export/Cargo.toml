@@ -1,0 +1,29 @@
+[package]
+name = "jolt-proof-export"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Host-side tool: prove a guest with jolt-core and export verifier-model artifacts"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+common = { workspace = true, features = ["std"] }
+jolt-artifacts = { path = "../jolt-artifacts" }
+jolt-core = { workspace = true, features = ["host"] }
+jolt-crypto = { workspace = true, features = ["bn254"] }
+jolt-dory = { path = "../../crates/jolt-dory" }
+jolt-field.workspace = true
+jolt-program = { workspace = true, features = ["serialization"] }
+jolt-transcript.workspace = true
+jolt-verifier = { workspace = true, features = [
+  "jolt-core-compat",
+  "transcript-blake2b",
+  "parallel",
+] }
+postcard = { workspace = true, features = ["use-std"] }
+serde.workspace = true

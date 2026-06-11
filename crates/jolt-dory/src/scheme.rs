@@ -19,6 +19,7 @@ use jolt_field::Fr;
 use jolt_openings::{AdditivelyHomomorphic, CommitmentScheme, OpeningsError, ZkOpeningScheme};
 use jolt_poly::MultilinearPoly;
 use jolt_transcript::{AppendToTranscript, Label, LabelWithCount, Transcript};
+#[cfg(feature = "parallel")]
 use rayon::prelude::*;
 
 use crate::transcript::JoltToDoryTranscript;
@@ -84,7 +85,11 @@ pub struct DoryScheme;
 impl DoryScheme {
     #[tracing::instrument(skip_all, name = "DoryScheme::setup_prover", fields(max_num_vars))]
     pub fn setup_prover(max_num_vars: usize) -> DoryProverSetup {
-        DoryProverSetup(ArkworksProverSetup::new_from_urs(max_num_vars))
+        #[cfg(feature = "srs-cache")]
+        return DoryProverSetup(ArkworksProverSetup::new_from_urs(max_num_vars));
+
+        #[cfg(not(feature = "srs-cache"))]
+        DoryProverSetup(ArkworksProverSetup::new(max_num_vars))
     }
 
     /// Derives the verifier SRS (a subset of the prover SRS).
@@ -255,11 +260,19 @@ impl AdditivelyHomomorphic for DoryScheme {
     fn combine(commitments: &[Self::Output], scalars: &[Self::Field]) -> Self::Output {
         assert_eq!(commitments.len(), scalars.len());
 
+        #[cfg(feature = "parallel")]
         let combined = commitments
             .par_iter()
             .zip(scalars.par_iter())
             .map(|(c, s)| jolt_fr_to_ark(s) * jolt_gt_to_ark(&c.0))
             .reduce(ArkGT::identity, |acc, x| acc + x);
+
+        #[cfg(not(feature = "parallel"))]
+        let combined = commitments
+            .iter()
+            .zip(scalars.iter())
+            .map(|(c, s)| jolt_fr_to_ark(s) * jolt_gt_to_ark(&c.0))
+            .fold(ArkGT::identity(), |acc, x| acc + x);
 
         DoryCommitment(ark_to_jolt_gt(&combined))
     }
@@ -281,16 +294,19 @@ impl AdditivelyHomomorphic for DoryScheme {
             .map(|(hint, &scalar)| scalar * hint.commit_blind)
             .sum();
 
-        let combined: Vec<Bn254G1> = (0..num_rows)
-            .into_par_iter()
-            .map(|row| {
-                let mut acc = Bn254G1::default();
-                for (hint, &scalar) in hints.iter().zip(scalars.iter()) {
-                    acc += hint.row_commitments[row].scalar_mul(&scalar);
-                }
-                acc
-            })
-            .collect();
+        let combine_row = |row: usize| {
+            let mut acc = Bn254G1::default();
+            for (hint, &scalar) in hints.iter().zip(scalars.iter()) {
+                acc += hint.row_commitments[row].scalar_mul(&scalar);
+            }
+            acc
+        };
+
+        #[cfg(feature = "parallel")]
+        let combined: Vec<Bn254G1> = (0..num_rows).into_par_iter().map(combine_row).collect();
+
+        #[cfg(not(feature = "parallel"))]
+        let combined: Vec<Bn254G1> = (0..num_rows).map(combine_row).collect();
 
         DoryHint::new(combined, combined_blind)
     }
@@ -403,12 +419,16 @@ fn commit_rows_dense<P: MultilinearPoly<Fr> + ?Sized>(
     let mut rows: Vec<Vec<Fr>> = Vec::new();
     poly.for_each_row(sigma, &mut |_, row| rows.push(row.to_vec()));
 
-    rows.par_iter()
-        .map(|row| {
-            let scalars: Vec<ArkFr> = row.iter().map(jolt_fr_to_ark).collect();
-            G1Routines::msm(&g1_bases[..scalars.len()], &scalars)
-        })
-        .collect()
+    let commit_row = |row: &Vec<Fr>| {
+        let scalars: Vec<ArkFr> = row.iter().map(jolt_fr_to_ark).collect();
+        G1Routines::msm(&g1_bases[..scalars.len()], &scalars)
+    };
+
+    #[cfg(feature = "parallel")]
+    return rows.par_iter().map(commit_row).collect();
+
+    #[cfg(not(feature = "parallel"))]
+    rows.iter().map(commit_row).collect()
 }
 
 /// One-hot commit: O(T) group additions for unit-valued one-hot polynomials.
@@ -431,15 +451,18 @@ fn commit_rows_one_hot<P: MultilinearPoly<Fr> + ?Sized>(
         cols_per_row[row].push(col);
     });
 
-    cols_per_row
-        .par_iter()
-        .map(|cols| {
-            cols.iter()
-                .fold(<InnerBN254 as PairingCurve>::G1::identity(), |acc, &col| {
-                    <InnerBN254 as PairingCurve>::G1::add(&acc, &g1_bases[col])
-                })
-        })
-        .collect()
+    let commit_row = |cols: &Vec<usize>| {
+        cols.iter()
+            .fold(<InnerBN254 as PairingCurve>::G1::identity(), |acc, &col| {
+                <InnerBN254 as PairingCurve>::G1::add(&acc, &g1_bases[col])
+            })
+    };
+
+    #[cfg(feature = "parallel")]
+    return cols_per_row.par_iter().map(commit_row).collect();
+
+    #[cfg(not(feature = "parallel"))]
+    cols_per_row.iter().map(commit_row).collect()
 }
 
 fn compute_row_commitments<P: MultilinearPoly<Fr> + ?Sized>(

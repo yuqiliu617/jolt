@@ -6,7 +6,11 @@ use jolt_crypto::{DeriveSetup, VectorCommitment};
 use jolt_openings::CommitmentScheme;
 use jolt_program::preprocess::JoltProgramPreprocessing;
 
-#[derive(Clone)]
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
+#[serde(bound(
+    serialize = "PCS::VerifierSetup: serde::Serialize, VC::Setup: serde::Serialize",
+    deserialize = "PCS::VerifierSetup: serde::de::DeserializeOwned, VC::Setup: serde::de::DeserializeOwned"
+))]
 pub struct JoltVerifierPreprocessing<PCS, VC>
 where
     PCS: CommitmentScheme,

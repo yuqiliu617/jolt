@@ -8,14 +8,30 @@ description = "Dory commitment scheme implementation for the Jolt zkVM"
 [lints]
 workspace = true
 
+[features]
+default = ["parallel", "srs-cache"]
+parallel = [
+  "dep:rayon",
+  "jolt-crypto/parallel",
+  "jolt-poly/parallel",
+  "dory/parallel",
+]
+# Disk-cached SRS loading for setup generation; without it the SRS is
+# generated fresh on every call. Verifiers consume a deserialized setup
+# and never generate one.
+srs-cache = ["dory/disk-persistence"]
+
 [dependencies]
-jolt-crypto = { workspace = true }
+jolt-crypto = { workspace = true, features = ["bn254"] }
 jolt-field = { workspace = true }
 jolt-openings = { workspace = true }
 jolt-poly = { workspace = true }
 jolt-transcript = { workspace = true }
-dory = { workspace = true }
-rayon = { workspace = true }
+dory = { package = "dory-pcs", version = "0.3.0", default-features = false, features = [
+  "arkworks",
+  "zk",
+] }
+rayon = { workspace = true, optional = true }
 serde = { workspace = true, features = ["derive"] }
 tracing.workspace = true
 ark-serialize = { workspace = true }

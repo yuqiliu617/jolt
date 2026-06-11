@@ -13,33 +13,31 @@
 
 use std::{
     env, fs,
-    io::{self, Cursor, Read},
+    io::{Cursor, Read},
     path::PathBuf,
     sync::{Arc, Mutex, MutexGuard},
 };
 
 #[cfg(unix)]
-use std::{os::fd::AsRawFd, os::raw::c_int};
+use std::{io, os::fd::AsRawFd, os::raw::c_int};
 
 use ark_serialize::{CanonicalDeserialize, CanonicalSerialize};
 use common::jolt_device::JoltDevice;
 use jolt_claims::protocols::jolt::{
     JoltCommittedPolynomial, JoltOpeningId, JoltPolynomialId, JoltRelationId, JoltVirtualPolynomial,
 };
-use jolt_crypto::{Bn254G1, Pedersen, PedersenSetup};
+use jolt_crypto::{Bn254G1, Pedersen};
 #[cfg(not(feature = "zk"))]
 use jolt_dory::DoryCommitment;
-use jolt_dory::{DoryScheme, DoryVerifierSetup};
+use jolt_dory::DoryScheme;
 use jolt_field::Fr;
-use jolt_program::preprocess::JoltProgramPreprocessing;
 use jolt_riscv::{CircuitFlags, InstructionFlags};
 use jolt_transcript::Blake2bTranscript;
 use jolt_verifier::{
-    compat::convert::ImportedCoreProof, verify, JoltVerifierPreprocessing, VerifierError,
+    compat::convert::{convert_core_preprocessing, ImportedCoreProof},
+    verify, JoltVerifierPreprocessing, VerifierError,
 };
 
-#[cfg(feature = "zk")]
-use jolt_verifier::compat::convert::CoreCurveBridge;
 #[cfg(not(feature = "zk"))]
 use jolt_verifier::compat::convert::CorePcsBridge;
 
@@ -1312,42 +1310,5 @@ fn commit_trusted_advice_preprocessing_only(
 fn convert_preprocessing(
     preprocessing: &CoreVerifierPreprocessing<CoreField, Bn254Curve, DoryCommitmentScheme>,
 ) -> ConvertedPreprocessing {
-    JoltVerifierPreprocessing::new(
-        JoltProgramPreprocessing {
-            bytecode: preprocessing.shared.bytecode.as_ref().clone(),
-            ram: preprocessing.shared.ram.clone(),
-            memory_layout: preprocessing.shared.memory_layout.clone(),
-            max_padded_trace_length: preprocessing.shared.max_padded_trace_length,
-        },
-        preprocessing.shared.digest(),
-        DoryVerifierSetup(preprocessing.generators.clone()),
-        convert_vc_setup(preprocessing),
-    )
-}
-
-#[cfg(not(feature = "zk"))]
-fn convert_vc_setup(
-    _preprocessing: &CoreVerifierPreprocessing<CoreField, Bn254Curve, DoryCommitmentScheme>,
-) -> Option<PedersenSetup<Bn254G1>> {
-    None
-}
-
-#[cfg(feature = "zk")]
-fn convert_vc_setup(
-    preprocessing: &CoreVerifierPreprocessing<CoreField, Bn254Curve, DoryCommitmentScheme>,
-) -> Option<PedersenSetup<Bn254G1>> {
-    let setup = &preprocessing
-        .blindfold_setup
-        .as_ref()
-        .expect("ZK core preprocessing must carry BlindFold setup")
-        .0;
-    Some(PedersenSetup::new(
-        setup
-            .message_generators
-            .iter()
-            .copied()
-            .map(<Bn254Curve as CoreCurveBridge<CoreField>>::g1_into_verifier)
-            .collect(),
-        <Bn254Curve as CoreCurveBridge<CoreField>>::g1_into_verifier(setup.blinding_generator),
-    ))
+    convert_core_preprocessing(preprocessing).expect("convert core preprocessing")
 }

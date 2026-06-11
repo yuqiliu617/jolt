@@ -1,0 +1,15 @@
+[package]
+name = "jolt-artifacts"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Versioned container format for Jolt verifier artifacts exchanged between host and ckb-vm"
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+postcard = { workspace = true, features = ["alloc"] }
+serde.workspace = true
+thiserror.workspace = true

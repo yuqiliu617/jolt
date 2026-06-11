@@ -114,6 +114,9 @@ members = [
   "jolt-eval",
   "jolt-eval/macros",
   "jolt-eval/guest-sandbox",
+  "ckb/jolt-artifacts",
+  "ckb/jolt-proof-export",
+  "ckb/jolt-verify-smoke",
 ]
 exclude = ["jolt-eval/fuzz"]
 
@@ -382,12 +385,12 @@ tracer = { path = "./tracer", default-features = false }
 jolt-core = { path = "./jolt-core", default-features = false }
 jolt-blindfold = { path = "./crates/jolt-blindfold" }
 jolt-claims = { path = "./crates/jolt-claims" }
-jolt-crypto = { path = "./crates/jolt-crypto" }
+jolt-crypto = { path = "./crates/jolt-crypto", default-features = false }
 jolt-field = { path = "./crates/jolt-field" }
 jolt-openings = { path = "./crates/jolt-openings" }
-jolt-verifier = { path = "./crates/jolt-verifier" }
-jolt-poly = { path = "./crates/jolt-poly" }
-jolt-r1cs = { path = "./crates/jolt-r1cs" }
+jolt-verifier = { path = "./crates/jolt-verifier", default-features = false }
+jolt-poly = { path = "./crates/jolt-poly", default-features = false }
+jolt-r1cs = { path = "./crates/jolt-r1cs", default-features = false }
 jolt-transcript = { path = "./crates/jolt-transcript" }
 jolt-sumcheck = { path = "./crates/jolt-sumcheck" }
 jolt-riscv = { path = "./crates/jolt-riscv", default-features = false }

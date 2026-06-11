@@ -7,6 +7,7 @@ use crate::compat::{
 };
 use crate::{
     config::JoltProtocolConfig,
+    preprocessing::JoltVerifierPreprocessing,
     proof::{
         JoltCommitments, JoltProof, JoltProofClaims, JoltRaCommitments, JoltStageProofs,
         TracePolynomialOrder,
@@ -18,13 +19,14 @@ use jolt_claims::protocols::jolt::{JoltOneHotConfig, JoltReadWriteConfig};
 use jolt_crypto::VectorCommitmentOpening;
 use jolt_crypto::{
     Bn254G1, Bn254GT, Commitment as ModularCommitment, HomomorphicCommitment, Pedersen,
-    VectorCommitment as ModularVectorCommitment,
+    PedersenSetup, VectorCommitment as ModularVectorCommitment,
 };
-use jolt_dory::{DoryCommitment, DoryProof, DoryScheme};
+use jolt_dory::{DoryCommitment, DoryProof, DoryScheme, DoryVerifierSetup};
 use jolt_field::{Field as ModularField, Fr as ModularFr};
 use jolt_lookup_tables::XLEN as RISCV_XLEN;
 use jolt_openings::CommitmentScheme as ModularCommitmentScheme;
 use jolt_poly::{CompressedPoly, UnivariatePoly};
+use jolt_program::preprocess::JoltProgramPreprocessing;
 use jolt_sumcheck::{
     ClearProof, ClearSumcheckProof, CommittedOutputClaims, CommittedRound, CommittedSumcheckProof,
     CompressedSumcheckProof, SumcheckProof,
@@ -51,6 +53,7 @@ use jolt_core::{
     zkvm::{
         config::{OneHotConfig as CoreOneHotConfig, ReadWriteConfig as CoreReadWriteConfig},
         proof_serialization::JoltProof as CoreJoltProof,
+        verifier::JoltVerifierPreprocessing as CoreVerifierPreprocessing,
     },
 };
 #[cfg(feature = "zk")]
@@ -870,4 +873,67 @@ fn convert_instruction_flag(
         core_instruction::InstructionFlags::Branch => jolt_riscv::InstructionFlags::Branch,
         core_instruction::InstructionFlags::IsNoop => jolt_riscv::InstructionFlags::IsNoop,
     }
+}
+
+/// Converts core verifier preprocessing into the verifier-owned model for the
+/// canonical BN254 + Dory instantiation.
+///
+/// In ZK builds the core preprocessing must carry a BlindFold setup, which
+/// becomes the model's Pedersen vector-commitment setup; in standard builds
+/// the vector-commitment setup is absent.
+pub fn convert_core_preprocessing(
+    preprocessing: &CoreVerifierPreprocessing<
+        ark_bn254::Fr,
+        CoreBn254Curve,
+        CoreDoryCommitmentScheme,
+    >,
+) -> Result<JoltVerifierPreprocessing<DoryScheme, Pedersen<Bn254G1>>, VerifierError> {
+    Ok(JoltVerifierPreprocessing::new(
+        JoltProgramPreprocessing {
+            bytecode: preprocessing.shared.bytecode.as_ref().clone(),
+            ram: preprocessing.shared.ram.clone(),
+            memory_layout: preprocessing.shared.memory_layout.clone(),
+            max_padded_trace_length: preprocessing.shared.max_padded_trace_length,
+        },
+        preprocessing.shared.digest(),
+        DoryVerifierSetup(preprocessing.generators.clone()),
+        convert_vc_setup(preprocessing)?,
+    ))
+}
+
+#[cfg(not(feature = "zk"))]
+fn convert_vc_setup(
+    _preprocessing: &CoreVerifierPreprocessing<
+        ark_bn254::Fr,
+        CoreBn254Curve,
+        CoreDoryCommitmentScheme,
+    >,
+) -> Result<Option<PedersenSetup<Bn254G1>>, VerifierError> {
+    Ok(None)
+}
+
+#[cfg(feature = "zk")]
+fn convert_vc_setup(
+    preprocessing: &CoreVerifierPreprocessing<
+        ark_bn254::Fr,
+        CoreBn254Curve,
+        CoreDoryCommitmentScheme,
+    >,
+) -> Result<Option<PedersenSetup<Bn254G1>>, VerifierError> {
+    let setup = &preprocessing
+        .blindfold_setup
+        .as_ref()
+        .ok_or(VerifierError::MissingVectorCommitmentSetup)?
+        .0;
+    Ok(Some(PedersenSetup::new(
+        setup
+            .message_generators
+            .iter()
+            .copied()
+            .map(<CoreBn254Curve as CoreCurveBridge<ark_bn254::Fr>>::g1_into_verifier)
+            .collect(),
+        <CoreBn254Curve as CoreCurveBridge<ark_bn254::Fr>>::g1_into_verifier(
+            setup.blinding_generator,
+        ),
+    )))
 }

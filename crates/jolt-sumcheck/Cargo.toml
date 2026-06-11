@@ -23,5 +23,6 @@ tracing.workspace = true
 thiserror.workspace = true
 
 [dev-dependencies]
+jolt-crypto = { workspace = true, features = ["bn254"] }
 num-traits = { workspace = true }
 rand_core = { workspace = true }

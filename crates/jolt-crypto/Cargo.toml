@@ -19,7 +19,7 @@ categories = ["cryptography"]
 workspace = true
 
 [features]
-default = ["bn254"]
+default = ["bn254", "parallel"]
 bn254 = [
   "dep:ark-bn254",
   "dep:ark-ec",
@@ -29,7 +29,6 @@ bn254 = [
   "dep:num-bigint",
   "dep:num-integer",
   "dep:num-traits",
-  "parallel",
 ]
 parallel = ["dep:rayon", "jolt-poly/parallel"]
 
@@ -60,7 +59,7 @@ criterion = { workspace = true }
 
 [[test]]
 name = "coverage"
-required-features = ["bn254"]
+required-features = ["bn254", "parallel"]
 
 [[test]]
 name = "group_laws"

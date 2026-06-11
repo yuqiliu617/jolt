@@ -184,8 +184,10 @@ mod g1;
 mod g2;
 mod gt;
 
+#[cfg(feature = "parallel")]
 #[doc(hidden)]
 pub mod batch_addition;
+#[cfg(feature = "parallel")]
 #[doc(hidden)]
 pub mod glv;
 

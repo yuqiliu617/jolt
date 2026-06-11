@@ -2767,6 +2767,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "jolt-artifacts"
+version = "0.1.0"
+dependencies = [
+ "postcard",
+ "serde",
+ "thiserror 2.0.18",
+]
+
+[[package]]
 name = "jolt-blindfold"
 version = "0.1.0"
 dependencies = [
@@ -3177,6 +3186,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "jolt-proof-export"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "common",
+ "jolt-artifacts",
+ "jolt-core",
+ "jolt-crypto",
+ "jolt-dory",
+ "jolt-field",
+ "jolt-program",
+ "jolt-transcript",
+ "jolt-verifier",
+ "postcard",
+ "serde",
+]
+
+[[package]]
 name = "jolt-r1cs"
 version = "0.1.0"
 dependencies = [
@@ -3290,6 +3318,21 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 2.0.18",
+]
+
+[[package]]
+name = "jolt-verify-smoke"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "common",
+ "jolt-artifacts",
+ "jolt-crypto",
+ "jolt-dory",
+ "jolt-field",
+ "jolt-transcript",
+ "jolt-verifier",
+ "serde",
 ]
 
 [[package]]
