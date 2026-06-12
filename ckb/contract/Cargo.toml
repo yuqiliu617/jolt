@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["jolt-verify-contract"]
+members = ["jolt-verify-contract", "bn128-bench"]
 
 [workspace.package]
 edition = "2021"

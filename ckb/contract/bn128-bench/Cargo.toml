@@ -1,0 +1,20 @@
+[package]
+name = "bn128-bench"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+description = "Micro-benchmark of ckb-alt-bn128 (VM-tuned BN254) inside ckb-vm"
+publish = false
+
+[dependencies]
+ckb-std = { version = "1.1.0", default-features = false, features = [
+  "allocator",
+  "dummy-atomic",
+] }
+# Requires clang for the riscv64 Montgomery assembly; set CLANG=<path> if
+# no `clang` is on PATH.
+parity-bn = { version = "0.1.6", package = "ckb-alt-bn128" }
+
+[[bin]]
+name = "bn128-bench"
+path = "src/main.rs"

@@ -186,6 +186,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "bn128-bench"
+version = "0.1.0"
+dependencies = [
+ "ckb-alt-bn128",
+ "ckb-std",
+]
+
+[[package]]
 name = "buddy-alloc"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -212,6 +220,15 @@ name = "cfg-if"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
+
+[[package]]
+name = "ckb-alt-bn128"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4236225e4d1723d2681c597b489ce715249721bd1c2f52dcf8c152d0a9874b5"
+dependencies = [
+ "cc",
+]
 
 [[package]]
 name = "ckb-gen-types"
