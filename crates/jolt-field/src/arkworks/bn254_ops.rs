@@ -108,8 +108,18 @@ const BARRETT_MU: u64 = {
     q as u64
 };
 
-/// 16384-entry lookup table mapping small integers to their Montgomery form.
+/// Lookup table mapping small integers to their Montgomery form.
+///
+/// Sized for the prover, which converts huge numbers of small trace values.
+/// The `compact-precomp` feature shrinks it to 256 entries (8 KiB vs 512 KiB)
+/// for the verifier, where small-int conversion is rare and binary size is at
+/// a premium (the ckb-vm contract runs in a 4 MB address space). Correctness
+/// is identical either way — `from_u64`/`from_u128` fall back to a Montgomery
+/// multiply for values past the table.
+#[cfg(not(feature = "compact-precomp"))]
 const PRECOMP_TABLE_SIZE: usize = 1 << 14;
+#[cfg(feature = "compact-precomp")]
+const PRECOMP_TABLE_SIZE: usize = 1 << 8;
 
 /// `PRECOMP_TABLE[i]` = Montgomery form of `i` for BN254 Fr.
 ///
@@ -519,7 +529,10 @@ mod tests {
         assert_eq!(PRECOMP_TABLE[0], Fr::from(0u64));
         assert_eq!(PRECOMP_TABLE[1], Fr::from(1u64));
         assert_eq!(PRECOMP_TABLE[42], Fr::from(42u64));
-        assert_eq!(PRECOMP_TABLE[16383], Fr::from(16383u64));
+        assert_eq!(
+            PRECOMP_TABLE[PRECOMP_TABLE_SIZE - 1],
+            Fr::from((PRECOMP_TABLE_SIZE - 1) as u64)
+        );
     }
 
     #[test]

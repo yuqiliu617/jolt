@@ -120,13 +120,27 @@ Optimization levers, in expected-impact order:
 Back-of-envelope: levers 1–3 together put stage8 at ~0.6–0.8 G and decode at
 ~0.1–0.2 G, i.e. ~1 G total before touching pairings or sumchecks.
 
-Memory: the VM gives a script 4 MB total. The ELF is ~1.5 MB text
-(opt-level=s; opt-level=3 is ~2.1 MB and forces the heap below the
-verifier's working set) + 2.3 MB buddy heap + ~190 KB stack headroom.
-Host-measured peak live heap for this verification is ~1.6 MiB
-(`jolt-verify-smoke` prints heap stats). Larger guests/traces will push both
-the artifact sizes and the working set up — re-measure with bigger fixtures
-before trusting these margins.
+Memory: the VM gives a script 4 MB total. The ELF is ~744 KB text +
+2.3 MB buddy heap + stack. Host-measured peak live heap for this
+verification is ~1.6 MiB (`jolt-verify-smoke` prints heap stats). Larger
+guests/traces will push both the artifact sizes and the working set up —
+re-measure with bigger fixtures before trusting these margins.
+
+### Binary size
+
+The contract is **~744 KB** text (~745 KB stripped on disk). Symbol
+attribution (heap excluded) put nearly half the original 1.26 MB in one
+static: `jolt_field`'s `PRECOMP_TABLE`, a 16384-entry Montgomery-form cache
+for small integers sized for the *prover*. The `compact-precomp` feature
+(enabled by the contract's `jolt-field` dep) shrinks it to 256 entries
+(512 KiB → 8 KiB); verification stays bit-identical (the `from_u64`/`u128`
+fallback computes past the table) and cycles move +0.004%. The default
+(prover/host) build keeps the full table.
+
+A backend swap to ckb-alt-bn128 is *not* a size lever: the replaceable
+arkworks Fq/EC arithmetic is only ~105 KB, the rest is Jolt protocol logic
+(~410 KB, backend-independent) and runtime. Further cheap wins if needed:
+`opt-level = "z"`, `build-std` + `panic_immediate_abort` (trims `core::fmt`).
 
 Build notes:
 - `-C target-feature=-a,+forced-atomics`: mainnet VMs run IMC+B+MOP without

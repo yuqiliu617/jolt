@@ -34,6 +34,9 @@ std = [
 ]
 bn254 = ["dep:ark-ff", "dep:ark-serialize", "dep:ark-bn254"]
 allocative = ["dep:allocative"]
+# Shrink the small-int Montgomery table from 16384 to 256 entries
+# (512 KiB -> 8 KiB). For verifier/contract builds where binary size matters.
+compact-precomp = []
 
 [dev-dependencies]
 ark-std = { workspace = true }

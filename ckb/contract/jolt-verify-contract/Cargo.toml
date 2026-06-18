@@ -22,7 +22,7 @@ common = { path = "../../../common", default-features = false }
 jolt-artifacts = { path = "../../jolt-artifacts", default-features = false }
 jolt-crypto = { path = "../../../crates/jolt-crypto", default-features = false, features = ["bn254"] }
 jolt-dory = { path = "../../../crates/jolt-dory", default-features = false }
-jolt-field = { path = "../../../crates/jolt-field", default-features = false, features = ["bn254"] }
+jolt-field = { path = "../../../crates/jolt-field", default-features = false, features = ["bn254", "compact-precomp"] }
 jolt-transcript = { path = "../../../crates/jolt-transcript", default-features = false }
 jolt-verifier = { path = "../../../crates/jolt-verifier", default-features = false, features = ["transcript-blake2b"] }
 postcard = { version = "1.0.8", default-features = false, features = ["alloc"] }
