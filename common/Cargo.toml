@@ -7,7 +7,6 @@ edition = "2021"
 default = ["std"]
 allocative = ["dep:allocative"]
 std = [
-  "allocative",
   "dep:ark-serialize",
   "ark-serialize?/std",
   "serde/std",

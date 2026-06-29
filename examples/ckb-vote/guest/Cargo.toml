@@ -1,0 +1,15 @@
+[package]
+name = "ckb-vote-guest"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+guest = []
+
+[dependencies]
+jolt = { package = "jolt-sdk", path = "../../../jolt-sdk" }
+# The same vote-verification logic the SP1 PoC proves, built no_std. Vanilla
+# RustCrypto blake2b (no precompile) — identical computation to SP1.
+ckb-vote-verification = { path = "../../../../ckb-vote-poc/crates/verification", default-features = false }
+ckb-vote-types = { path = "../../../../ckb-vote-poc/crates/types" }
+molecule = { version = "0.9.2", default-features = false }

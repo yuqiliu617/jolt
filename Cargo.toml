@@ -106,6 +106,7 @@ members = [
   "examples/advice-demo",
   "examples/advice-demo/guest",
   "examples/advice-consumer/guest",
+  "examples/ckb-vote/guest",
   "examples/sig-recovery/host",
   "examples/sig-recovery/guest",
   "zklean-extractor",

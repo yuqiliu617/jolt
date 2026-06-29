@@ -8,9 +8,7 @@
 
 use ckb_vm::cost_model::estimate_cycles;
 use ckb_vm::registers::{A0, A7};
-use ckb_vm::{
-    Bytes, DefaultMachineRunner, Memory, Register, SupportMachine, Syscalls,
-};
+use ckb_vm::{Bytes, DefaultMachineRunner, Memory, Register, SupportMachine, Syscalls};
 
 struct DebugSyscall;
 
@@ -66,14 +64,26 @@ impl<Mac: SupportMachine> Syscalls<Mac> for CurrentCycles {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let path = std::env::args()
         .nth(1)
-        .ok_or("usage: jolt-cycle-runner <riscv64-elf>")?;
+        .ok_or("usage: jolt-cycle-runner <riscv64-elf> [memory_mib]")?;
     let code: Bytes = std::fs::read(&path)?.into();
 
-    let core_machine = ckb_vm::DefaultCoreMachine::<u64, ckb_vm::SparseMemory<u64>>::new(
-        ckb_vm::ISA_IMC | ckb_vm::ISA_B | ckb_vm::ISA_MOP,
-        ckb_vm::machine::VERSION2,
-        u64::MAX,
-    );
+    // CKB mainnet VMs run with a 4 MiB address space (the ckb-vm default).
+    // An optional second arg expands it purely to measure cycles for proofs
+    // whose decoded artifacts exceed 4 MiB; cycle counts are independent of
+    // memory size.
+    let memory_size = std::env::args()
+        .nth(2)
+        .map(|s| s.parse::<usize>().map(|mib| mib * 1024 * 1024))
+        .transpose()?
+        .unwrap_or(ckb_vm::DEFAULT_MEMORY_SIZE);
+
+    let core_machine =
+        ckb_vm::DefaultCoreMachine::<u64, ckb_vm::SparseMemory<u64>>::new_with_memory(
+            ckb_vm::ISA_IMC | ckb_vm::ISA_B | ckb_vm::ISA_MOP,
+            ckb_vm::machine::VERSION2,
+            u64::MAX,
+            memory_size,
+        );
     let mut machine = ckb_vm::RustDefaultMachineBuilder::new(core_machine)
         .instruction_cycle_func(Box::new(estimate_cycles))
         .syscall(Box::new(DebugSyscall))

@@ -1,4 +1,4 @@
-#[cfg(feature = "std")]
+#[cfg(feature = "allocative")]
 use allocative::Allocative;
 #[cfg(feature = "std")]
 use ark_serialize::{CanonicalDeserialize, CanonicalSerialize};
@@ -42,10 +42,8 @@ impl core::fmt::Display for MemoryLayoutError {
 /// to the reserved memory address space for program outputs.
 /// The inputs and outputs are part of the public inputs to the proof.
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[cfg_attr(
-    feature = "std",
-    derive(Allocative, CanonicalSerialize, CanonicalDeserialize)
-)]
+#[cfg_attr(feature = "std", derive(CanonicalSerialize, CanonicalDeserialize))]
+#[cfg_attr(feature = "allocative", derive(Allocative))]
 pub struct JoltDevice {
     pub inputs: Vec<u8>,
     pub trusted_advice: Vec<u8>,
@@ -223,10 +221,8 @@ impl Default for MemoryConfig {
 }
 
 #[derive(Default, Clone, PartialEq, Serialize, Deserialize)]
-#[cfg_attr(
-    feature = "std",
-    derive(Allocative, CanonicalSerialize, CanonicalDeserialize)
-)]
+#[cfg_attr(feature = "std", derive(CanonicalSerialize, CanonicalDeserialize))]
+#[cfg_attr(feature = "allocative", derive(Allocative))]
 pub struct MemoryLayout {
     /// The total size of the elf's sections, including the .text, .data, .rodata, and .bss sections.
     pub program_size: u64,

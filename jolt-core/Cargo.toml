@@ -81,7 +81,7 @@ tracing.workspace = true
 tracing-chrome.workspace = true
 tracing-subscriber.workspace = true
 eyre.workspace = true
-common.workspace = true
+common = { workspace = true, features = ["allocative"] }
 tracer = { workspace = true, default-features = false, features = ["std"] }
 bincode.workspace = true
 derive_more.workspace = true
